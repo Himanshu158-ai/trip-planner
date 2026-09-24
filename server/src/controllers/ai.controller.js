@@ -1,4 +1,7 @@
-export const planner = (req, res) => {
+import { plannerService } from "../services/ai.service.js";
+import {plannerPrompt} from "../prompts/planner.prompt.js";
+
+export const planner = async (req, res) => {
     const {
         destination,
         days,
@@ -22,121 +25,22 @@ export const planner = (req, res) => {
         });
     }
 
+
+    const prompt = plannerPrompt({
+        destination,
+        days,
+        travelers,
+        budget,
+        interests,
+        travelType
+    })
+
     try {
-        const tripPlan = {
-            destination,
-            days,
-            travelers,
-            budget,
-            interests,
-            travelType,
+        const response = await plannerService(prompt);
+        const data = response.output_text;
 
-            itinerary: [
-                {
-                    day: 1,
-                    title: "Arrival & Local Exploration",
-                    activities: [
-                        {
-                            time: "10:00 AM",
-                            place: "Hotel",
-                            activity: "Check-in and rest"
-                        },
-                        {
-                            time: "01:00 PM",
-                            place: "Local Restaurant",
-                            activity: "Lunch"
-                        },
-                        {
-                            time: "04:00 PM",
-                            place: "City Center",
-                            activity: "Local sightseeing"
-                        },
-                        {
-                            time: "07:00 PM",
-                            place: "Local Market",
-                            activity: "Explore the market and dinner"
-                        }
-                    ]
-                },
-
-                {
-                    day: 2,
-                    title: "Main Attractions",
-                    activities: [
-                        {
-                            time: "09:00 AM",
-                            place: "Main Tourist Attraction",
-                            activity: "Sightseeing"
-                        },
-                        {
-                            time: "01:00 PM",
-                            place: "Local Restaurant",
-                            activity: "Lunch"
-                        },
-                        {
-                            time: "03:00 PM",
-                            place: "Popular Tourist Spot",
-                            activity: "Explore and photography"
-                        },
-                        {
-                            time: "07:00 PM",
-                            place: "Local Cafe",
-                            activity: "Dinner and relaxation"
-                        }
-                    ]
-                },
-
-                {
-                    day: 3,
-                    title: "Relaxation & Shopping",
-                    activities: [
-                        {
-                            time: "10:00 AM",
-                            place: "Popular Local Place",
-                            activity: "Sightseeing"
-                        },
-                        {
-                            time: "01:00 PM",
-                            place: "Local Restaurant",
-                            activity: "Lunch"
-                        },
-                        {
-                            time: "04:00 PM",
-                            place: "Shopping Market",
-                            activity: "Shopping"
-                        },
-                        {
-                            time: "07:00 PM",
-                            place: "Hotel",
-                            activity: "Pack and relax"
-                        }
-                    ]
-                }
-            ],
-
-            budgetBreakdown: {
-                accommodation: Math.round(budget * 0.35),
-                food: Math.round(budget * 0.20),
-                transport: Math.round(budget * 0.20),
-                activities: Math.round(budget * 0.15),
-                miscellaneous: Math.round(budget * 0.10)
-            },
-
-            packingList: [
-                "Comfortable clothes",
-                "Comfortable shoes",
-                "Phone charger",
-                "Power bank",
-                "ID proof",
-                "Water bottle"
-            ],
-
-            tips: [
-                "Start sightseeing early",
-                "Keep some cash with you",
-                "Keep important documents safe"
-            ]
-        };
+        // parse JSON
+        const tripPlan = JSON.parse(data);
 
         return res.status(200).json({
             success: true,
