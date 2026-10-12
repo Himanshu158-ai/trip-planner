@@ -82,9 +82,12 @@ export default function Navbar() {
           <a
             href="/#planner"
             onClick={(e) => go(e, "planner")}
-            className="group hidden items-center justify-center border border-neutral-900 bg-transparent px-5 py-2 text-[11px] font-medium tracking-[0.22em] text-neutral-900 transition-all duration-300 hover:bg-neutral-900 hover:text-white sm:inline-flex"
+            className="group relative hidden items-center justify-center overflow-hidden border border-neutral-900 bg-transparent px-6 py-2.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-neutral-900 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-sm sm:inline-flex"
           >
-            Access v1.0
+            <span className="absolute inset-0 translate-y-full bg-neutral-900 transition-transform duration-300 ease-out group-hover:translate-y-0" />
+            <span className="relative z-10 transition-colors duration-300 group-hover:text-white">
+              Access v1.0
+            </span>
           </a>
 
           <button

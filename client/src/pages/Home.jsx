@@ -273,12 +273,16 @@ export default function Home() {
                   e.preventDefault();
                   scrollToId("planner");
                 }}
-                className="group inline-flex items-center justify-center gap-3 border border-neutral-900 bg-neutral-900 px-7 py-3.5 text-[11px] font-medium uppercase tracking-[0.22em] text-white transition-all hover:bg-neutral-800"
+                className="group relative inline-flex items-center justify-center gap-3 overflow-hidden border border-neutral-900 bg-neutral-900 px-8 py-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#C5A059] hover:shadow-[0_14px_30px_-6px_rgba(197,160,89,0.4)]"
               >
-                Plan My Journey
+                {/* Gold luxury curtain fill */}
+                <span className="absolute inset-0 -translate-y-full bg-[#C5A059] transition-transform duration-400 ease-out group-hover:translate-y-0" />
+                <span className="relative z-10 transition-colors duration-300 group-hover:text-neutral-950">
+                  Plan My Journey
+                </span>
                 <ArrowRight
                   size={14}
-                  className="transition-transform group-hover:translate-x-1"
+                  className="relative z-10 transition-all duration-300 group-hover:translate-x-1.5 group-hover:text-neutral-950"
                 />
               </a>
 
@@ -288,9 +292,17 @@ export default function Home() {
                   e.preventDefault();
                   scrollToId("destinations");
                 }}
-                className="inline-flex items-center justify-center border border-neutral-300 bg-transparent px-7 py-3.5 text-[11px] font-medium uppercase tracking-[0.22em] text-neutral-800 transition-colors hover:border-neutral-900 hover:text-neutral-950"
+                className="group relative inline-flex items-center justify-center gap-3 overflow-hidden border border-neutral-300 bg-transparent px-8 py-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-800 transition-all duration-300 hover:-translate-y-0.5 hover:border-neutral-900 hover:shadow-md"
               >
-                Explore Destinations
+                {/* Dark curtain fill */}
+                <span className="absolute inset-0 translate-y-full bg-neutral-900 transition-transform duration-400 ease-out group-hover:translate-y-0" />
+                <span className="relative z-10 transition-colors duration-300 group-hover:text-white">
+                  Explore Destinations
+                </span>
+                <ArrowRight
+                  size={14}
+                  className="relative z-10 transition-all duration-300 group-hover:translate-x-1.5 group-hover:text-[#C5A059]"
+                />
               </a>
             </div>
           </div>
@@ -488,21 +500,20 @@ export default function Home() {
                 type="submit"
                 disabled={loading}
                 aria-busy={loading}
-                className="group inline-flex items-center justify-center gap-3 border border-neutral-900 bg-neutral-900 px-8 py-4 text-[11px] font-medium uppercase tracking-[0.22em] text-white transition hover:bg-neutral-800 disabled:opacity-50"
+                className="group relative inline-flex items-center justify-center gap-3 overflow-hidden border border-neutral-900 bg-neutral-900 px-9 py-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#C5A059] hover:shadow-[0_14px_32px_-8px_rgba(197,160,89,0.45)] disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none"
               >
+                {/* Gold luxury curtain fill */}
+                <span className="absolute inset-0 -translate-y-full bg-gradient-to-r from-[#B89047] via-[#C5A059] to-[#DFBF7D] transition-transform duration-400 ease-out group-hover:translate-y-0" />
+                <span className="relative z-10 transition-colors duration-300 group-hover:text-neutral-950">
+                  {loading ? "Orchestrating Dossier…" : "Generate Itinerary — v1.0"}
+                </span>
                 {loading ? (
-                  <>
-                    <span>Orchestrating Dossier…</span>
-                    <LoaderCircle size={14} className="animate-spin" />
-                  </>
+                  <LoaderCircle size={14} className="relative z-10 animate-spin group-hover:text-neutral-950" />
                 ) : (
-                  <>
-                    <span>Generate Itinerary — v1.0</span>
-                    <ArrowRight
-                      size={14}
-                      className="transition-transform group-hover:translate-x-1"
-                    />
-                  </>
+                  <ArrowRight
+                    size={14}
+                    className="relative z-10 transition-all duration-300 group-hover:translate-x-1.5 group-hover:text-neutral-950"
+                  />
                 )}
               </button>
 
@@ -534,42 +545,82 @@ export default function Home() {
             className="mb-14"
           />
 
-          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
             {DESTINATIONS.map((d, index) => (
               <li key={d.name}>
                 <button
                   type="button"
                   onClick={() => selectDestination(d.name)}
-                  className="group relative block aspect-[4/5] w-full overflow-hidden border border-neutral-200/80 bg-neutral-100 text-left transition focus-visible:outline-none"
+                  className="group relative block aspect-[4/5] w-full overflow-hidden border border-neutral-300/80 bg-neutral-950 text-left transition-all duration-700 hover:-translate-y-2 hover:border-[#C5A059] hover:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.4),0_0_35px_rgba(197,160,89,0.18)] focus-visible:outline-none"
                 >
+                  {/* Top gold accent line animation */}
+                  <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#C5A059] to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-out z-30 origin-center" />
+
+                  {/* Ambient image with smooth optical zoom */}
                   <img
                     src={d.image}
                     alt={`${d.name} landscape`}
                     loading="lazy"
                     onError={(e) => (e.currentTarget.style.display = "none")}
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="absolute inset-0 h-full w-full object-cover brightness-[0.92] contrast-[1.05] transition-all duration-700 ease-out group-hover:scale-110 group-hover:brightness-100 group-hover:contrast-110"
                   />
+
+                  {/* Multi-layered cinematic vignette & overlay */}
                   <div
                     aria-hidden="true"
-                    className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent transition-opacity group-hover:from-black/85"
+                    className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/20 transition-opacity duration-500 group-hover:from-black/98 group-hover:via-black/55 group-hover:to-black/30"
                   />
-                  <div className="absolute inset-x-0 top-0 p-5">
-                    <span className="font-editorial-serif text-[13px] tracking-[0.2em] text-white/70">
-                      0{index + 1}
+
+                  {/* Top Header Row with Index & Curated Badge Reveal */}
+                  <div className="absolute inset-x-0 top-0 z-20 flex items-center justify-between p-6">
+                    <span className="font-editorial-serif text-[13px] tracking-[0.25em] text-white/80 transition-colors duration-300 group-hover:text-[#C5A059]">
+                      0{index + 1} <span className="text-white/40 group-hover:text-[#C5A059]/60 font-light text-[11px]">/ ARCHIVE</span>
+                    </span>
+
+                    <span className="inline-flex items-center gap-1.5 border border-white/20 bg-black/50 px-3 py-1 text-[9px] font-semibold uppercase tracking-[0.22em] text-[#C5A059] backdrop-blur-md opacity-0 -translate-y-2 transition-all duration-500 ease-out group-hover:opacity-100 group-hover:translate-y-0 shadow-sm">
+                      <span className="h-1 w-1 rounded-full bg-[#C5A059] animate-pulse" />
+                      Curated Escape
                     </span>
                   </div>
-                  <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-6 text-white">
-                    <div>
-                      <span className="block font-editorial-serif text-2xl font-normal tracking-tight">
-                        {d.name}
-                      </span>
-                      <span className="mt-1 block text-[11px] uppercase tracking-[0.18em] text-[#C5A059]">
-                        {d.phrase}
+
+                  {/* Bottom Content with Staged Text Reveal */}
+                  <div className="absolute inset-x-0 bottom-0 z-20 p-6 sm:p-7">
+                    {/* Category / Region Tag */}
+                    <div className="flex items-center gap-2">
+                      <span className="h-px w-3 bg-[#C5A059] transition-all duration-500 group-hover:w-6" />
+                      <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#C5A059]">
+                        {d.region || "Sanctuary"}
                       </span>
                     </div>
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center border border-white/30 bg-white/10 text-white backdrop-blur-sm transition-colors group-hover:border-white group-hover:bg-white group-hover:text-neutral-900">
-                      <ArrowRight size={14} />
-                    </span>
+
+                    {/* Destination Name */}
+                    <h3 className="mt-2 font-editorial-serif text-2xl sm:text-[28px] font-normal tracking-tight text-white transition-transform duration-500 ease-out group-hover:-translate-y-0.5">
+                      {d.name}
+                    </h3>
+
+                    {/* Smooth Text Reveal Drawer for Phrase & Prompt */}
+                    <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-out group-hover:grid-rows-[1fr]">
+                      <div className="overflow-hidden">
+                        <p className="pt-2.5 text-[13px] font-normal leading-relaxed text-neutral-300 opacity-0 transition-all duration-500 delay-75 group-hover:opacity-100">
+                          {d.phrase}
+                        </p>
+                        
+                        <div className="mt-3 flex items-center justify-between border-t border-white/10 pt-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#C5A059] opacity-0 transition-all duration-500 delay-100 group-hover:opacity-100">
+                          <span>Configure Itinerary</span>
+                          <span className="text-white/60">Tap to Plan →</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Interactive Arrow Disc on Right */}
+                    <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-3.5 group-hover:border-transparent transition-colors">
+                      <span className="text-[10px] tracking-[0.2em] uppercase text-neutral-400 group-hover:text-white transition-colors">
+                        Global Collection
+                      </span>
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-white/25 bg-white/10 text-white backdrop-blur-md transition-all duration-500 group-hover:border-[#C5A059] group-hover:bg-[#C5A059] group-hover:text-black group-hover:rotate-[-45deg] group-hover:scale-110 shadow-lg">
+                        <ArrowRight size={14} />
+                      </span>
+                    </div>
                   </div>
                 </button>
               </li>
@@ -615,8 +666,17 @@ export default function Home() {
 
       {/* Final Editorial Call to Action */}
       <section className="relative z-10 px-6 py-20 sm:px-12 sm:py-28">
-        <div className="mx-auto max-w-7xl border border-neutral-900 bg-neutral-900 p-8 text-white sm:p-16">
-          <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-end">
+        <div className="group relative mx-auto max-w-7xl overflow-hidden border border-neutral-800 bg-[#0F0E0D] p-8 text-white transition-all duration-700 hover:border-[#C5A059]/60 hover:shadow-[0_30px_70px_-20px_rgba(0,0,0,0.6),0_0_50px_rgba(197,160,89,0.12)] sm:p-16">
+          {/* Ambient radial gold glow on hover */}
+          <div className="pointer-events-none absolute -right-20 -top-20 h-96 w-96 rounded-full bg-[#C5A059]/10 blur-3xl transition-all duration-700 group-hover:scale-125 group-hover:bg-[#C5A059]/25" />
+
+          {/* Architectural corner crosshairs */}
+          <div className="pointer-events-none absolute left-3 top-3 text-[10px] text-[#C5A059]/40 transition-colors group-hover:text-[#C5A059]">+</div>
+          <div className="pointer-events-none absolute right-3 top-3 text-[10px] text-[#C5A059]/40 transition-colors group-hover:text-[#C5A059]">+</div>
+          <div className="pointer-events-none absolute bottom-3 left-3 text-[10px] text-[#C5A059]/40 transition-colors group-hover:text-[#C5A059]">+</div>
+          <div className="pointer-events-none absolute bottom-3 right-3 text-[10px] text-[#C5A059]/40 transition-colors group-hover:text-[#C5A059]">+</div>
+
+          <div className="relative z-10 flex flex-col items-start justify-between gap-8 md:flex-row md:items-end">
             <div>
               <div className="mb-4 flex items-center gap-3">
                 <span className="h-px w-8 bg-[#C5A059]" />
@@ -633,16 +693,18 @@ export default function Home() {
                 composed. Begin your itinerary in seconds.
               </p>
             </div>
+            
             <a
               href="#planner"
               onClick={(e) => {
                 e.preventDefault();
                 scrollToId("planner");
               }}
-              className="inline-flex items-center gap-3 border border-white bg-white px-8 py-3.5 text-[11px] font-medium uppercase tracking-[0.22em] text-neutral-900 transition hover:bg-neutral-100"
+              className="group/btn relative inline-flex items-center gap-3 overflow-hidden border border-neutral-900 bg-white px-9 py-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-950 transition-all duration-500 hover:-translate-y-0.5 hover:shadow-[0_15px_30px_rgba(197,160,89,0.35)]"
             >
-              Start Planning
-              <ArrowRight size={14} />
+              <span className="absolute inset-0 -translate-x-full bg-[#C5A059] transition-transform duration-500 ease-out group-hover/btn:translate-x-0" />
+              <span className="relative z-10 font-semibold transition-colors duration-300">Start Planning</span>
+              <ArrowRight size={14} className="relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1.5" />
             </a>
           </div>
         </div>
