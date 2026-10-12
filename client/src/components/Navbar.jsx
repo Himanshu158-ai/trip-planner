@@ -33,20 +33,30 @@ export default function Navbar() {
     <header className="fixed inset-x-0 top-4 z-40 px-4 sm:top-5">
       <nav
         aria-label="Primary"
-        className="mx-auto max-w-[1120px] rounded-[32px] border border-[#E7E1D5] bg-[#FDFBF6]/90 shadow-[0_8px_30px_rgba(33,31,26,0.08)] backdrop-blur-md"
+        className="mx-auto max-w-[1120px] rounded-[32px] border border-white/60 bg-white/35 shadow-[0_8px_32px_rgba(33,31,26,0.12),inset_0_1px_0_rgba(255,255,255,0.6)] backdrop-blur-xl backdrop-saturate-150"
       >
         <div className="flex h-[60px] items-center justify-between pl-4 pr-2 md:h-[64px] md:pl-5">
-          <a href="/#top" onClick={(e) => go(e, "top")} className="flex items-center gap-2.5 rounded-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#211F1A]">
+          <a
+            href="/#top"
+            onClick={(e) => go(e, "top")}
+            className="flex items-center gap-2.5 rounded-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#211F1A]"
+          >
             <span className="flex h-8 w-8 items-center justify-center rounded-[10px] bg-[#FFC943] text-[#211F1A]">
               <Compass size={18} strokeWidth={2.4} />
             </span>
-            <span className="text-[19px] font-extrabold tracking-[-0.03em] text-[#211F1A]">Wayfinder AI</span>
+            <span className="text-[19px] font-extrabold tracking-[-0.03em] text-[#211F1A]">
+              RoamWise
+            </span>
           </a>
 
           <ul className="hidden items-center gap-8 md:flex">
             {links.map((l) => (
               <li key={l.id}>
-                <a href={`/#${l.id}`} onClick={(e) => go(e, l.id)} className="text-[14.5px] font-medium text-[#77746C] transition-colors hover:text-[#211F1A] focus-visible:text-[#211F1A]">
+                <a
+                  href={`/#${l.id}`}
+                  onClick={(e) => go(e, l.id)}
+                  className="text-[14.5px] font-medium text-[#211F1A]/70 transition-colors hover:text-[#211F1A] focus-visible:text-[#211F1A]"
+                >
                   {l.label}
                 </a>
               </li>
@@ -54,10 +64,17 @@ export default function Navbar() {
           </ul>
 
           <div className="flex items-center gap-2">
-            <a href="/#planner" onClick={(e) => go(e, "planner")} className="group hidden h-11 items-center gap-2.5 rounded-full bg-[#FFC943] pl-5 pr-1.5 text-sm font-bold text-[#211F1A] transition-colors hover:bg-[#F1B82D] sm:inline-flex">
+            <a
+              href="/#planner"
+              onClick={(e) => go(e, "planner")}
+              className="group hidden h-11 items-center gap-2.5 rounded-full bg-[#FFC943] pl-5 pr-1.5 text-sm font-bold text-[#211F1A] transition-colors hover:bg-[#F1B82D] sm:inline-flex"
+            >
               Plan my trip
               <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white">
-                <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none" />
+                <ArrowRight
+                  size={15}
+                  className="transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none"
+                />
               </span>
             </a>
             <button
@@ -66,7 +83,7 @@ export default function Navbar() {
               aria-expanded={open}
               aria-controls="mobile-menu"
               onClick={() => setOpen((o) => !o)}
-              className="flex h-11 w-11 items-center justify-center rounded-full text-[#211F1A] hover:bg-[#F7F4EC] md:hidden"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-[#211F1A] hover:bg-white/50 md:hidden"
             >
               {open ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -74,17 +91,28 @@ export default function Navbar() {
         </div>
 
         {open && (
-          <div id="mobile-menu" className="border-t border-[#E7E1D5] p-3 md:hidden">
+          <div
+            id="mobile-menu"
+            className="rounded-b-[32px] border-t border-white/50 bg-[#FDFBF6]/75 p-3 backdrop-blur-xl md:hidden"
+          >
             <ul>
               {links.map((l) => (
                 <li key={l.id}>
-                  <a href={`/#${l.id}`} onClick={(e) => go(e, l.id)} className="block rounded-2xl px-4 py-3.5 text-[15px] font-medium text-[#211F1A] hover:bg-[#F7F4EC]">
+                  <a
+                    href={`/#${l.id}`}
+                    onClick={(e) => go(e, l.id)}
+                    className="block rounded-2xl px-4 py-3.5 text-[15px] font-medium text-[#211F1A] hover:bg-white/60"
+                  >
                     {l.label}
                   </a>
                 </li>
               ))}
             </ul>
-            <a href="/#planner" onClick={(e) => go(e, "planner")} className="mt-2 flex h-12 items-center justify-center gap-2 rounded-full bg-[#FFC943] text-sm font-bold text-[#211F1A] sm:hidden">
+            <a
+              href="/#planner"
+              onClick={(e) => go(e, "planner")}
+              className="mt-2 flex h-12 items-center justify-center gap-2 rounded-full bg-[#FFC943] text-sm font-bold text-[#211F1A] sm:hidden"
+            >
               Plan my trip <ArrowRight size={16} />
             </a>
           </div>
