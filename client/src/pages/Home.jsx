@@ -1,30 +1,13 @@
-
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { generateTrip } from "../service/tripApi";
+import Navbar from "../components/Navbar";
+import { DESTINATIONS, HERO_IMAGE } from "../data/destinations";
+import { scrollToId } from "../utils/scroll";
 import {
-  ArrowRight,
-  CalendarDays,
-  Camera,
-  Check,
-  Clock3,
-  Compass,
-  Lightbulb,
-  LoaderCircle,
-  MapPin,
-  Minus,
-  Mountain,
-  Plus,
-  Sparkles,
-  TreePalm,
-  Users,
-  Wallet,
-  Waves,
-  Utensils,
-  Landmark,
-  Plane,
-  AlertCircle,
-  ChevronDown,
+  AlertCircle, ArrowRight, CalendarDays, Camera, Check, ChevronDown, Compass,
+  Landmark, ListChecks, LoaderCircle, MapPin, Minus, Mountain, Plus, Sparkles,
+  TreePalm, Users, Utensils, Wallet, Waves,
 } from "lucide-react";
 
 const interestsList = [
@@ -36,69 +19,35 @@ const interestsList = [
   { name: "Nature", icon: TreePalm },
 ];
 
-const destinations = [
-  {
-    name: "Bali, Indonesia",
-    label: "Tropical escape",
-    image:
-      "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=700&q=85",
-  },
-  {
-    name: "Swiss Alps",
-    label: "Mountain retreat",
-    image:
-      "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=700&q=85",
-  },
-  {
-    name: "Goa, India",
-    label: "Beach getaway",
-    image:
-      "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=700&q=85",
-  },
+const steps = [
+  { icon: MapPin, title: "Choose your destination", text: "Tell us where you want to go, your budget, and your interests." },
+  { icon: Sparkles, title: "Generate your itinerary", text: "Let AI organize your trip into a practical day-by-day plan." },
+  { icon: ListChecks, title: "Explore with confidence", text: "Review activities, estimated costs, and useful travel tips." },
 ];
 
 const money = (amount) =>
-  new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(Number(amount) || 0);
+  new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(Number(amount) || 0);
 
-function Counter({ label, value, onChange, min, max, icon: Icon }) {
+const field =
+  "w-full rounded-2xl border border-[#E7E1D5] bg-[#FDFBF6] text-[15px] text-[#211F1A] outline-none transition placeholder:text-[#77746C]/70 focus:border-[#211F1A] focus:ring-4 focus:ring-[#FFF0C5]";
+
+function Counter({ label, unit, value, onChange, min, max, icon: Icon }) {
+  const btn =
+    "flex h-9 w-9 items-center justify-center rounded-full border border-[#E7E1D5] bg-white transition hover:bg-[#FFF0C5] disabled:opacity-35 disabled:hover:bg-white";
   return (
-    <div>
-      <label className="mb-2.5 flex items-center gap-2 text-sm font-semibold">
-        <Icon size={16} className="text-[#79966f]" />
-        {label}
-      </label>
-
-      <div className="flex items-center justify-between rounded-xl border border-[#e2e1d9] bg-[#f8f7f3] px-4 py-3">
-        <span className="text-sm text-[#7b857d]">
-          {value} {label === "Trip duration" ? "days" : "people"}
+    <div role="group" aria-label={label}>
+      <span className="mb-2 flex items-center gap-2 text-sm font-semibold text-[#211F1A]">
+        <Icon size={16} className="text-[#77746C]" /> {label}
+      </span>
+      <div className="flex h-[54px] items-center justify-between rounded-2xl border border-[#E7E1D5] bg-[#FDFBF6] px-4">
+        <span className="text-[15px] text-[#211F1A]" aria-live="polite">
+          {value} {unit}
         </span>
-
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            aria-label={`Decrease ${label}`}
-            disabled={value <= min}
-            onClick={() => onChange(Math.max(min, value - 1))}
-            className="rounded-full border border-[#deded5] p-1.5 transition hover:bg-white disabled:opacity-35"
-          >
+        <div className="flex items-center gap-2">
+          <button type="button" aria-label={`Decrease ${label}`} disabled={value <= min} onClick={() => onChange(Math.max(min, value - 1))} className={btn}>
             <Minus size={14} />
           </button>
-
-          <span className="w-5 text-center text-sm font-semibold">
-            {value}
-          </span>
-
-          <button
-            type="button"
-            aria-label={`Increase ${label}`}
-            disabled={value >= max}
-            onClick={() => onChange(Math.min(max, value + 1))}
-            className="rounded-full border border-[#deded5] p-1.5 transition hover:bg-white disabled:opacity-35"
-          >
+          <button type="button" aria-label={`Increase ${label}`} disabled={value >= max} onClick={() => onChange(Math.min(max, value + 1))} className={btn}>
             <Plus size={14} />
           </button>
         </div>
@@ -107,8 +56,18 @@ function Counter({ label, value, onChange, min, max, icon: Icon }) {
   );
 }
 
+function SectionHeading({ title, text, className = "" }) {
+  return (
+    <div className={className}>
+      <h2 className="text-[34px] font-extrabold leading-[1.08] tracking-[-0.03em] text-[#211F1A] sm:text-5xl">{title}</h2>
+      <p className="mt-3 max-w-xl text-base leading-7 text-[#77746C] sm:text-lg">{text}</p>
+    </div>
+  );
+}
+
 export default function Home() {
   const navigate = useNavigate();
+  const { hash } = useLocation();
 
   const [destination, setDestination] = useState("");
   const [days, setDays] = useState(5);
@@ -116,59 +75,43 @@ export default function Home() {
   const [budget, setBudget] = useState("25000");
   const [interests, setInterests] = useState(["Nature", "Food"]);
   const [travelType, setTravelType] = useState("Couple");
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [heroOk, setHeroOk] = useState(true);
+
+  useEffect(() => {
+    if (!hash) return;
+    const t = setTimeout(() => scrollToId(hash.slice(1)), 50);
+    return () => clearTimeout(t);
+  }, [hash]);
 
   function toggleInterest(name) {
-    setInterests((current) =>
-      current.includes(name)
-        ? current.filter((item) => item !== name)
-        : [...current, name]
-    );
+    setInterests((c) => (c.includes(name) ? c.filter((i) => i !== name) : [...c, name]));
     setError("");
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
+    if (loading) return;
     setError("");
 
-    if (!destination.trim()) {
-      setError("Please enter your destination.");
-      return;
-    }
-
-    if (!interests.length) {
-      setError("Please select at least one interest.");
-      return;
-    }
-
+    if (!destination.trim()) return setError("Please enter your destination.");
+    if (!interests.length) return setError("Please select at least one interest.");
     const numericBudget = Number(budget);
-
-    if (!Number.isFinite(numericBudget) || numericBudget <= 0) {
-      setError("Please enter a valid budget greater than zero.");
-      return;
-    }
-
-    const tripData = {
-      destination: destination.trim(),
-      days,
-      travelers,
-      budget: numericBudget,
-      interests,
-      travelType,
-    };
+    if (!Number.isFinite(numericBudget) || numericBudget <= 0)
+      return setError("Please enter a valid budget greater than zero.");
 
     setLoading(true);
-
     try {
-      const result = await generateTrip(tripData);
-
-      sessionStorage.setItem(
-        "generatedTrip",
-        JSON.stringify(result)
-      );
-
+      const result = await generateTrip({
+        destination: destination.trim(),
+        days,
+        travelers,
+        budget: numericBudget,
+        interests,
+        travelType,
+      });
+      sessionStorage.setItem("generatedTrip", JSON.stringify(result));
       navigate("/trip-result");
     } catch (err) {
       setError(
@@ -187,404 +130,242 @@ export default function Home() {
   function selectDestination(name) {
     setDestination(name);
     setError("");
-    document.getElementById("planner")?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
+    scrollToId("planner");
   }
 
+  const ctaPrimary =
+    "group inline-flex h-[52px] items-center gap-3 rounded-full bg-[#FFC943] pl-6 pr-1.5 text-[15px] font-bold text-[#211F1A] transition-colors hover:bg-[#F1B82D] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#211F1A]";
+  const arrowDisc = "flex h-10 w-10 items-center justify-center rounded-full bg-white";
+  const arrowMove = "transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none";
+
   return (
-    <div className="min-h-screen bg-[#f5f4f0] text-[#18352b]">
-      {/* Navbar */}
-      <header className="sticky top-0 z-30 border-b border-[#e2e1d9] bg-[#f5f4f0]/95 backdrop-blur-xl">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
-          <button
-            type="button"
-            onClick={() =>
-              window.scrollTo({ top: 0, behavior: "smooth" })
-            }
-            className="flex items-center gap-2.5 text-left"
-          >
-            <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#214b3a] text-white">
-              <Compass size={22} />
+    <div id="top" className="min-h-screen bg-[#F7F4EC] font-['Manrope','DM_Sans',system-ui,sans-serif] text-[#211F1A]">
+      <Navbar />
+
+      {/* Hero */}
+      <section className="relative mx-2 mt-2 flex min-h-[calc(100svh-1rem)] items-end overflow-hidden rounded-[24px] bg-[#E9DFC8] sm:mx-3 sm:mt-3 sm:rounded-[28px]">
+        {heroOk && (
+          <img
+            src={HERO_IMAGE}
+            alt="Cliffside coastal town overlooking the sea at golden hour"
+            fetchPriority="high"
+            onError={() => setHeroOk(false)}
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+        )}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(90deg, rgba(247,244,236,0.86) 0%, rgba(247,244,236,0.45) 52%, rgba(247,244,236,0) 100%), linear-gradient(0deg, rgba(247,244,236,0.5) 0%, rgba(247,244,236,0) 45%)",
+          }}
+        />
+        <div className="relative z-10 w-full px-5 pb-12 pt-36 sm:px-[4.5vw] sm:pb-16">
+          <div className="max-w-[780px]">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#E7E1D5] bg-[#FDFBF6]/90 px-3.5 py-2 text-xs font-semibold tracking-wide text-[#211F1A]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#FFC943]" />
+              ✦ YOUR NEXT ADVENTURE STARTS HERE
             </span>
-
-            <span>
-              <span className="block text-lg font-bold tracking-tight">
-                roam<span className="text-[#7a9b65]">wise</span>
-              </span>
-              <span className="block text-[10px] tracking-[0.2em] text-[#718077]">
-                TRAVEL, THOUGHTFULLY
-              </span>
-            </span>
-          </button>
-
-          <div className="hidden items-center gap-8 text-sm font-medium text-[#627067] md:flex">
-            <a href="#planner" className="transition hover:text-[#214b3a]">
-              Plan a trip
-            </a>
-            <a
-              href="#destinations"
-              className="transition hover:text-[#214b3a]"
-            >
-              Explore
-            </a>
-            <span className="rounded-full border border-[#dfe5dc] px-4 py-2 text-[#214b3a]">
-              <Sparkles size={13} className="mr-1 inline" />
-              AI travel planner
-            </span>
-          </div>
-
-          <a
-            href="#planner"
-            className="rounded-full bg-[#214b3a] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#17392b]"
-          >
-            Start planning
-          </a>
-        </nav>
-      </header>
-
-      <main className="mx-auto max-w-7xl px-5 pb-16 pt-10 sm:px-8 sm:pt-16">
-        {/* Hero */}
-        <section className="grid items-center gap-10 lg:grid-cols-[1fr_0.9fr] lg:gap-16">
-          <div>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#dce6d8] bg-[#fdfcf9] px-3.5 py-2 text-xs font-semibold text-[#41674b]">
-              <Sparkles size={14} />
-              YOUR NEXT ADVENTURE STARTS HERE
-            </div>
-
-            <h1 className="max-w-2xl text-4xl font-semibold leading-[1.12] tracking-[-0.045em] sm:text-6xl">
-              Less planning.
+            <h1 className="mt-6 text-[42px] font-extrabold leading-[1.02] tracking-[-0.04em] sm:text-[64px] lg:text-[76px]">
+              Travel smarter.
               <br />
-              <span className="font-serif font-normal italic text-[#729467]">
-                More wandering.
-              </span>
+              Discover more.
             </h1>
-
-            <p className="mt-5 max-w-lg text-base leading-7 text-[#68766d] sm:text-lg">
-              Tell us what you love, where you want to go, and your budget.
-              We'll help turn it into a trip worth remembering.
+            <p className="mt-6 max-w-[540px] text-base leading-7 text-[#4d4a43] sm:text-lg">
+              Create personalized travel itineraries in minutes, discover incredible places, and plan every detail of your next adventure with AI.
             </p>
-
-            <div className="mt-7 flex flex-wrap gap-5 text-sm text-[#637168]">
-              <span className="flex items-center gap-2">
-                <Check size={16} className="text-[#6c9263]" />
-                Personalized itineraries
-              </span>
-              <span className="flex items-center gap-2">
-                <Check size={16} className="text-[#6c9263]" />
-                Budget-aware planning
-              </span>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a href="#planner" onClick={(e) => { e.preventDefault(); scrollToId("planner"); }} className={ctaPrimary + " justify-between sm:justify-start"}>
+                Plan my trip
+                <span className={arrowDisc}><ArrowRight size={17} className={arrowMove} /></span>
+              </a>
+              <a href="#destinations" onClick={(e) => { e.preventDefault(); scrollToId("destinations"); }} className="group inline-flex h-[52px] items-center justify-center gap-2 rounded-full bg-[#211F1A] px-6 text-[15px] font-semibold text-white transition-colors hover:bg-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#211F1A]">
+                Explore destinations
+                <ArrowRight size={16} className={arrowMove} />
+              </a>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div className="relative">
-            <img
-              src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1200&q=90"
-              alt="A beautiful alpine lake surrounded by mountains"
-              fetchPriority="high"
-              className="h-[300px] w-full rounded-[28px] object-cover sm:h-[410px]"
-            />
+      {/* Planner */}
+      <section id="planner" className="scroll-mt-24 px-5 py-20 sm:px-8 sm:py-28">
+        <div className="mx-auto max-w-[920px]">
+          <SectionHeading title="Your trip, your way." text="Tell us what you love. We'll help plan the rest." className="mb-10 text-center [&>p]:mx-auto" />
 
-            <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/60 bg-[#fdfcf9]/95 p-4 shadow-lg backdrop-blur sm:inset-x-5 sm:bottom-5 sm:p-5">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <p className="text-xs font-medium text-[#718077]">
-                    YOUR NEXT CHAPTER
-                  </p>
-                  <p className="mt-1 text-lg font-semibold">
-                    Somewhere beautiful.
-                  </p>
-                </div>
-                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#e9f0e4] text-[#41674b]">
-                  <Plane size={21} />
-                </span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Planner */}
-        <section
-          id="planner"
-          className="mt-16 grid scroll-mt-24 gap-8 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start"
-        >
-          <div className="rounded-3xl border border-[#e2e1d9] bg-[#fdfcf9] p-5 shadow-[0_12px_50px_rgba(28,55,39,0.04)] sm:p-8">
-            <div className="mb-8">
-              <p className="text-[11px] font-bold tracking-[0.18em] text-[#82917e]">
-                LET'S DESIGN YOUR GETAWAY
-              </p>
-              <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
-                Plan your trip
-              </h2>
-              <p className="mt-2 text-sm leading-6 text-[#778179]">
-                A few details are all we need to get started.
-              </p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-7">
-              {/* Destination */}
-              <div>
-                <label
-                  htmlFor="destination"
-                  className="mb-2.5 block text-sm font-semibold"
-                >
-                  Where do you want to go?
+          <form onSubmit={handleSubmit} noValidate className="space-y-6 rounded-[28px] border border-[#E7E1D5] bg-white p-5 shadow-[0_20px_60px_rgba(33,31,26,0.06)] sm:p-10">
+            <div className="grid gap-6 md:grid-cols-2">
+              <div className="md:col-span-2">
+                <label htmlFor="destination" className="mb-2 flex items-center gap-2 text-sm font-semibold">
+                  <MapPin size={16} className="text-[#77746C]" /> Destination
                 </label>
-
-                <div className="flex items-center gap-3 rounded-xl border border-[#e2e1d9] bg-[#f8f7f3] px-4 transition focus-within:border-[#7b9d71] focus-within:ring-4 focus-within:ring-[#eaf0e5]">
-                  <MapPin size={19} className="shrink-0 text-[#79966f]" />
-                  <input
-                    id="destination"
-                    required
-                    maxLength={120}
-                    value={destination}
-                    onChange={(event) => {
-                      setDestination(event.target.value);
-                      setError("");
-                    }}
-                    placeholder="Try Goa, Bali or the Swiss Alps..."
-                    className="min-w-0 flex-1 bg-transparent py-4 text-sm outline-none placeholder:text-[#a1aaa1]"
-                  />
-                </div>
-              </div>
-
-              {/* Duration and travelers */}
-              <div className="grid gap-5 sm:grid-cols-2">
-                <Counter
-                  label="Trip duration"
-                  value={days}
-                  min={1}
-                  max={30}
-                  onChange={setDays}
-                  icon={CalendarDays}
-                />
-
-                <Counter
-                  label="Travelers"
-                  value={travelers}
-                  min={1}
-                  max={20}
-                  onChange={setTravelers}
-                  icon={Users}
+                <input
+                  id="destination"
+                  maxLength={120}
+                  value={destination}
+                  disabled={loading}
+                  onChange={(e) => { setDestination(e.target.value); setError(""); }}
+                  placeholder="Try Goa, Bali or the Swiss Alps"
+                  className={field + " h-[54px] px-4"}
                 />
               </div>
 
-              {/* Budget */}
-              <div>
-                <label
-                  htmlFor="budget"
-                  className="mb-2.5 block text-sm font-semibold"
-                >
-                  <Wallet size={16} className="mr-2 inline text-[#79966f]" />
-                  Total trip budget
-                </label>
+              <Counter label="Number of days" unit={days === 1 ? "day" : "days"} value={days} min={1} max={30} onChange={setDays} icon={CalendarDays} />
+              <Counter label="Travelers" unit={travelers === 1 ? "person" : "people"} value={travelers} min={1} max={20} onChange={setTravelers} icon={Users} />
 
-                <div className="flex items-center rounded-xl border border-[#e2e1d9] bg-[#f8f7f3] px-4 transition focus-within:border-[#7b9d71]">
-                  <span className="mr-3 text-[#809080]">₹</span>
+              <div>
+                <label htmlFor="budget" className="mb-2 flex items-center gap-2 text-sm font-semibold">
+                  <Wallet size={16} className="text-[#77746C]" /> Total budget (INR)
+                </label>
+                <div className="relative">
+                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#77746C]">₹</span>
                   <input
                     id="budget"
                     type="number"
+                    inputMode="numeric"
                     min="1"
                     max="100000000"
-                    required
                     value={budget}
-                    onChange={(event) => {
-                      setBudget(event.target.value);
-                      setError("");
-                    }}
-                    className="w-full bg-transparent py-4 text-sm font-semibold outline-none"
+                    disabled={loading}
+                    onChange={(e) => { setBudget(e.target.value); setError(""); }}
+                    className={field + " h-[54px] pl-9 pr-4 font-semibold"}
                   />
-                  <span className="whitespace-nowrap text-xs text-[#89938a]">
-                    INR · Total
-                  </span>
                 </div>
-
-                <p className="mt-2 text-xs text-[#849087]">
-                  {Number(budget) > 0
-                    ? `${money(Number(budget) / travelers)} per traveler, approximately`
-                    : "Enter your total trip budget"}
+                <p className="mt-2 text-xs text-[#77746C]">
+                  {Number(budget) > 0 ? `About ${money(Number(budget) / travelers)} per traveler` : "Enter your total trip budget"}
                 </p>
               </div>
 
-              {/* Interests */}
-              <fieldset>
-                <legend className="mb-3 text-sm font-semibold">
-                  What are you interested in?
-                </legend>
-
-                <div className="flex flex-wrap gap-2.5">
-                  {interestsList.map(({ name, icon: Icon }) => {
-                    const selected = interests.includes(name);
-
-                    return (
-                      <button
-                        key={name}
-                        type="button"
-                        aria-pressed={selected}
-                        onClick={() => toggleInterest(name)}
-                        className={`inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium transition ${
-                          selected
-                            ? "border-[#315c43] bg-[#eaf0e5] text-[#214b3a]"
-                            : "border-[#e2e1d9] bg-[#f8f7f3] text-[#69766d] hover:border-[#a9bca0]"
-                        }`}
-                      >
-                        <Icon size={16} />
-                        {name}
-                        {selected && <Check size={14} />}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                <p className="mt-2 text-xs text-[#879087]">
-                  Choose all experiences you enjoy.
-                </p>
-              </fieldset>
-
-              {/* Travel style */}
               <div>
-                <label
-                  htmlFor="travelType"
-                  className="mb-2.5 block text-sm font-semibold"
-                >
-                  Who are you traveling with?
+                <label htmlFor="travelType" className="mb-2 flex items-center gap-2 text-sm font-semibold">
+                  <Compass size={16} className="text-[#77746C]" /> Travel type
                 </label>
-
                 <div className="relative">
-                  <select
-                    id="travelType"
-                    value={travelType}
-                    onChange={(event) => setTravelType(event.target.value)}
-                    className="w-full appearance-none rounded-xl border border-[#e2e1d9] bg-[#f8f7f3] px-4 py-4 text-sm outline-none transition focus:border-[#7b9d71]"
-                  >
-                    <option value="Solo">Solo</option>
-                    <option value="Couple">Couple</option>
-                    <option value="Friends">Friends</option>
-                    <option value="Family">Family</option>
+                  <select id="travelType" value={travelType} disabled={loading} onChange={(e) => setTravelType(e.target.value)} className={field + " h-[54px] appearance-none px-4 pr-10"}>
+                    <option>Solo</option>
+                    <option>Couple</option>
+                    <option>Friends</option>
+                    <option>Family</option>
                   </select>
-                  <ChevronDown
-                    size={16}
-                    className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#718077]"
-                  />
+                  <ChevronDown size={16} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#77746C]" />
                 </div>
               </div>
-
-              {/* Error */}
-              {error && (
-                <div
-                  role="alert"
-                  className="flex gap-3 rounded-xl border border-[#e7c8bd] bg-[#fbefeb] p-4 text-sm leading-6 text-[#8c4030]"
-                >
-                  <AlertCircle size={18} className="mt-0.5 shrink-0" />
-                  <span>{error}</span>
-                </div>
-              )}
-
-              {/* Submit */}
-              <button
-                type="submit"
-                disabled={loading}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#214b3a] px-5 py-4 text-sm font-semibold text-white shadow-sm transition hover:bg-[#17392b] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
-              >
-                {loading ? (
-                  <>
-                    <LoaderCircle size={18} className="animate-spin" />
-                    Creating your itinerary...
-                  </>
-                ) : (
-                  <>
-                    <Sparkles size={17} />
-                    Generate my itinerary
-                    <ArrowRight size={17} />
-                  </>
-                )}
-              </button>
-
-              {loading && (
-                <div
-                  role="status"
-                  aria-live="polite"
-                  className="rounded-xl bg-[#edf1e8] p-4 text-center"
-                >
-                  <p className="text-sm font-semibold text-[#315c43]">
-                    Your trip is being planned
-                  </p>
-                  <p className="mt-1 text-xs leading-5 text-[#718077]">
-                    We're organizing your activities, destination and budget.
-                    This can take a little while.
-                  </p>
-                </div>
-              )}
-
-              <p className="text-center text-xs text-[#929a91]">
-                Your journey starts with a few simple details.
-              </p>
-            </form>
-          </div>
-
-          {/* Destination suggestions */}
-          <aside id="destinations" className="space-y-4">
-            <div>
-              <p className="text-[11px] font-bold tracking-[0.18em] text-[#82917e]">
-                NEED INSPIRATION?
-              </p>
-              <h3 className="mt-2 text-xl font-semibold">
-                Popular escapes
-              </h3>
-              <p className="mt-1 text-sm text-[#7b857d]">
-                Pick a place to start dreaming.
-              </p>
             </div>
 
-            {destinations.map((place) => (
-              <button
-                key={place.name}
-                type="button"
-                disabled={loading}
-                onClick={() => selectDestination(place.name)}
-                className="group flex w-full items-center gap-4 rounded-2xl border border-[#e2e1d9] bg-[#fdfcf9] p-3 text-left transition hover:-translate-y-0.5 hover:border-[#c6d2bf] hover:shadow-md disabled:opacity-60"
-              >
-                <img
-                  src={place.image}
-                  alt={place.name}
-                  loading="lazy"
-                  className="h-[76px] w-[88px] shrink-0 rounded-xl object-cover"
-                />
+            <fieldset>
+              <legend className="mb-3 text-sm font-semibold">Interests</legend>
+              <div className="flex flex-wrap gap-2.5">
+                {interestsList.map(({ name, icon: Icon }) => {
+                  const on = interests.includes(name);
+                  return (
+                    <button
+                      key={name}
+                      type="button"
+                      aria-pressed={on}
+                      disabled={loading}
+                      onClick={() => toggleInterest(name)}
+                      className={`inline-flex h-11 items-center gap-2 rounded-full border px-4 text-sm font-medium transition ${
+                        on ? "border-[#211F1A] bg-[#FFF0C5] text-[#211F1A]" : "border-[#E7E1D5] bg-[#FDFBF6] text-[#77746C] hover:border-[#211F1A]/40"
+                      }`}
+                    >
+                      <Icon size={16} /> {name} {on && <Check size={14} />}
+                    </button>
+                  );
+                })}
+              </div>
+            </fieldset>
 
-                <span className="min-w-0 flex-1">
-                  <span className="block text-xs text-[#89958a]">
-                    {place.label}
-                  </span>
-                  <span className="mt-1 block font-semibold">
-                    {place.name}
-                  </span>
-                  <span className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-[#567b4d]">
-                    Use destination <ArrowRight size={12} />
-                  </span>
-                </span>
-              </button>
+            {error && (
+              <div role="alert" className="flex gap-3 rounded-2xl border border-[#E8C4B8] bg-[#FBEFEA] p-4 text-sm leading-6 text-[#8A3B27]">
+                <AlertCircle size={18} className="mt-0.5 shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
+
+            <button type="submit" disabled={loading} aria-busy={loading} className={ctaPrimary + " w-full justify-between disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"}>
+              {loading ? (
+                <>Creating your itinerary… <span className={arrowDisc}><LoaderCircle size={17} className="animate-spin motion-reduce:animate-none" /></span></>
+              ) : (
+                <>Generate my itinerary <span className={arrowDisc}><ArrowRight size={17} className={arrowMove} /></span></>
+              )}
+            </button>
+
+            {loading && (
+              <p role="status" aria-live="polite" className="text-sm leading-6 text-[#77746C]">
+                Building your day-by-day plan. This can take a little while, so please keep this page open.
+              </p>
+            )}
+          </form>
+        </div>
+      </section>
+
+      {/* Destinations */}
+      <section id="destinations" className="scroll-mt-24 px-5 pb-20 sm:px-8 sm:pb-28">
+        <div className="mx-auto max-w-[1200px]">
+          <SectionHeading title="Find your next favorite place." text="From quiet coastal escapes to unforgettable mountain adventures." className="mb-10" />
+          <ul className="grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+            {DESTINATIONS.map((d) => (
+              <li key={d.name}>
+                <button type="button" onClick={() => selectDestination(d.name)} className="group relative block aspect-[4/5] w-full overflow-hidden rounded-[22px] bg-[#E9DFC8] text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#211F1A] sm:aspect-[5/6]">
+                  <img src={d.image} alt={`${d.name} landscape`} loading="lazy" onError={(e) => (e.currentTarget.style.display = "none")} className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100" />
+                  <div aria-hidden="true" className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(25,23,18,0.62) 0%, rgba(25,23,18,0.18) 38%, rgba(25,23,18,0) 60%)" }} />
+                  <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-5 text-white">
+                    <span>
+                      <span className="block text-xl font-bold tracking-tight">{d.name}</span>
+                      <span className="mt-1 block text-sm text-white/85">{d.phrase}</span>
+                    </span>
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#FFC943] text-[#211F1A]">
+                      <ArrowRight size={16} className={arrowMove} />
+                    </span>
+                  </div>
+                </button>
+              </li>
             ))}
+          </ul>
+        </div>
+      </section>
 
-            <div className="rounded-2xl border border-[#e1e4d9] bg-[#ecefe6] p-5">
-              <Lightbulb size={20} className="text-[#54764a]" />
-              <p className="mt-3 font-semibold">Travel your way.</p>
-              <p className="mt-1 text-sm leading-6 text-[#657765]">
-                Start with your budget, interests and travel style. Your
-                personalized itinerary is just a click away.
-              </p>
-            </div>
+      {/* How it works */}
+      <section id="how-it-works" className="scroll-mt-24 border-y border-[#E7E1D5] bg-[#FDFBF6] px-5 py-20 sm:px-8 sm:py-28">
+        <div className="mx-auto max-w-[1100px]">
+          <SectionHeading title="Three steps to a plan." text="No spreadsheets, no endless tabs." className="mb-12" />
+          <ol className="grid gap-10 md:grid-cols-3 md:gap-12">
+            {steps.map(({ icon: Icon, title, text }, i) => (
+              <li key={title}>
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#FFF0C5] text-[#211F1A]"><Icon size={22} /></span>
+                <h3 className="mt-5 text-xl font-bold tracking-tight">
+                  <span className="sr-only">Step {i + 1}: </span>{title}
+                </h3>
+                <p className="mt-2 leading-7 text-[#77746C]">{text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
 
-            <div className="flex items-center gap-3 px-1 pt-2 text-xs text-[#879087]">
-              <Clock3 size={15} />
-              <span>Plan a weekend or a longer escape</span>
-            </div>
-          </aside>
-        </section>
-      </main>
+      {/* Final CTA */}
+      <section className="px-5 py-20 sm:px-8 sm:py-28">
+        <div className="mx-auto flex max-w-[1100px] flex-col items-start justify-between gap-8 rounded-[28px] bg-[#211F1A] p-8 text-white sm:p-14 md:flex-row md:items-center">
+          <div>
+            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-[-0.03em] sm:text-5xl">Ready when you are.</h2>
+            <p className="mt-3 max-w-md text-white/70">Your first itinerary is a few details away.</p>
+          </div>
+          <a href="#planner" onClick={(e) => { e.preventDefault(); scrollToId("planner"); }} className={ctaPrimary + " shrink-0"}>
+            Plan my trip <span className={arrowDisc}><ArrowRight size={17} className={arrowMove} /></span>
+          </a>
+        </div>
+      </section>
 
-      <footer className="border-t border-[#e2e1d9] px-5 py-6 text-center text-xs text-[#879087]">
-        Made for the journey, not just the destination. © Roamwise
+      <footer className="border-t border-[#E7E1D5] px-5 py-10 sm:px-8">
+        <div className="mx-auto flex max-w-[1100px] flex-col justify-between gap-6 text-sm text-[#77746C] sm:flex-row sm:items-center">
+          <p><span className="font-bold text-[#211F1A]">Wayfinder AI</span> · AI-generated travel itineraries. Check details before you book.</p>
+          <ul className="flex flex-wrap gap-6">
+            {[["Explore", "planner"], ["Destinations", "destinations"], ["How it works", "how-it-works"]].map(([l, id]) => (
+              <li key={id}><a href={`#${id}`} onClick={(e) => { e.preventDefault(); scrollToId(id); }} className="hover:text-[#211F1A]">{l}</a></li>
+            ))}
+          </ul>
+        </div>
       </footer>
     </div>
   );
