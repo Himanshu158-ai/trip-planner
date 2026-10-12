@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: "http://localhost:5000",
   timeout: 120000,
   headers: {
     "Content-Type": "application/json",
@@ -10,7 +10,7 @@ const api = axios.create({
 });
 
 export async function generateTrip(tripData) {
-  const response = await api.post("/api/trips/generate", tripData);
+  const response = await api.post("/api/ai/chat", tripData);
 
   if (!response.data?.success || !response.data?.data) {
     throw new Error(
