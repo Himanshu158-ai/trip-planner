@@ -253,18 +253,16 @@ export default function Home() {
             {/* Exact Serif Headline */}
             <h1 className="font-editorial-serif tracking-[-0.02em] leading-[0.93]">
               <span className="block text-[62px] font-normal text-neutral-900 sm:text-[88px] lg:text-[104px]">
-                Curated
+                Travel
               </span>
               <span className="mt-1 block font-editorial-serif text-[62px] font-normal italic text-[#C5A059] sm:mt-2 sm:text-[88px] lg:text-[104px]">
-                Excellence
+                Smarterr.
               </span>
             </h1>
 
             {/* Editorial Body Text */}
             <p className="mt-8 max-w-lg text-[15px] font-normal leading-[1.75] text-neutral-600 sm:mt-10 sm:text-[17px]">
-              Luxury isn't about adding decoration—it's about removing
-              everything unnecessary and perfecting what remains. Every element
-              must feel intentional and considered.
+              Tell us where you want to go, your budget and what you love. We turn it into a practical day-by-day itinerary in minutes.
             </p>
 
             {/* Architectural Actions */}
@@ -292,7 +290,7 @@ export default function Home() {
                 }}
                 className="inline-flex items-center justify-center border border-neutral-300 bg-transparent px-7 py-3.5 text-[11px] font-medium uppercase tracking-[0.22em] text-neutral-800 transition-colors hover:border-neutral-900 hover:text-neutral-950"
               >
-                View Sanctuaries
+                Explore Destinations
               </a>
             </div>
           </div>
@@ -327,9 +325,9 @@ export default function Home() {
         <div className="mx-auto max-w-4xl">
           <SectionHeading
             overline="BESPOKE ENGINE / PARAMETERS"
-            titlePrimary="Intelligent"
-            titleAccent="Curation."
-            text="Articulate your destination, duration, and financial boundaries. Our intelligence arranges a seamless day-by-day expedition."
+            titlePrimary="Plan Your"
+            titleAccent="Trip."
+            text="Tell us what you love. We'll help plan the rest."
             align="center"
             className="mb-14"
           />
@@ -357,7 +355,7 @@ export default function Home() {
                     setDestination(e.target.value);
                     setError("");
                   }}
-                  placeholder="e.g. Kyoto, Amalfi Coast, Swiss Alps"
+                  placeholder="e.g. Goa, Bali, Swiss Alps"
                   className="h-[52px] w-full border border-neutral-200 bg-[#FAF9F6] px-4 text-[14px] text-neutral-900 outline-none transition placeholder:text-neutral-400 focus:border-neutral-900 focus:bg-white"
                 />
               </div>
@@ -530,8 +528,8 @@ export default function Home() {
         <div className="mx-auto max-w-7xl">
           <SectionHeading
             overline="CURATED ARCHIVE / GLOBAL RETREATS"
-            titlePrimary="Enduring"
-            titleAccent="Sanctuaries."
+            titlePrimary="Find"
+            titleAccent="Trending Place."
             text="Quiet coastal promontories and high alpine preserves where landscape and architecture exist in pure harmony."
             className="mb-14"
           />
