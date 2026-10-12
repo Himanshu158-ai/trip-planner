@@ -5,9 +5,26 @@ import Navbar from "../components/Navbar";
 import { DESTINATIONS, HERO_IMAGE } from "../data/destinations";
 import { scrollToId } from "../utils/scroll";
 import {
-  AlertCircle, ArrowRight, CalendarDays, Camera, Check, ChevronDown, Compass,
-  Landmark, ListChecks, LoaderCircle, MapPin, Minus, Mountain, Plus, Sparkles,
-  TreePalm, Users, Utensils, Wallet, Waves,
+  AlertCircle,
+  ArrowRight,
+  CalendarDays,
+  Camera,
+  Check,
+  ChevronDown,
+  Compass,
+  Landmark,
+  ListChecks,
+  LoaderCircle,
+  MapPin,
+  Minus,
+  Mountain,
+  Plus,
+  Sparkles,
+  TreePalm,
+  Users,
+  Utensils,
+  Wallet,
+  Waves,
 } from "lucide-react";
 
 const interestsList = [
@@ -20,35 +37,58 @@ const interestsList = [
 ];
 
 const steps = [
-  { icon: MapPin, title: "Choose your destination", text: "Tell us where you want to go, your budget, and your interests." },
-  { icon: Sparkles, title: "Generate your itinerary", text: "Let AI organize your trip into a practical day-by-day plan." },
-  { icon: ListChecks, title: "Explore with confidence", text: "Review activities, estimated costs, and useful travel tips." },
+  {
+    num: "01",
+    title: "Define The Coordinates",
+    text: "Articulate your destination, travel party, and ideal financial parameters.",
+  },
+  {
+    num: "02",
+    title: "Intelligent Synthesis",
+    text: "Proprietary curation algorithms structure a balanced, day-by-day expedition.",
+  },
+  {
+    num: "03",
+    title: "Bespoke Exploration",
+    text: "Review curated timings, vetted venues, and estimated costs with effortless clarity.",
+  },
 ];
 
 const money = (amount) =>
-  new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(Number(amount) || 0);
-
-const field =
-  "w-full rounded-2xl border border-[#E7E1D5] bg-[#FDFBF6] text-[15px] text-[#211F1A] outline-none transition placeholder:text-[#77746C]/70 focus:border-[#211F1A] focus:ring-4 focus:ring-[#FFF0C5]";
+  new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+  }).format(Number(amount) || 0);
 
 function Counter({ label, unit, value, onChange, min, max, icon: Icon }) {
-  const btn =
-    "flex h-9 w-9 items-center justify-center rounded-full border border-[#E7E1D5] bg-white transition hover:bg-[#FFF0C5] disabled:opacity-35 disabled:hover:bg-white";
   return (
     <div role="group" aria-label={label}>
-      <span className="mb-2 flex items-center gap-2 text-sm font-semibold text-[#211F1A]">
-        <Icon size={16} className="text-[#77746C]" /> {label}
+      <span className="mb-2.5 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-500">
+        <Icon size={14} className="text-neutral-400" /> {label}
       </span>
-      <div className="flex h-[54px] items-center justify-between rounded-2xl border border-[#E7E1D5] bg-[#FDFBF6] px-4">
-        <span className="text-[15px] text-[#211F1A]" aria-live="polite">
+      <div className="flex h-[52px] items-center justify-between border border-neutral-200 bg-[#FAF9F6] px-4 transition focus-within:border-neutral-900">
+        <span className="text-[14px] font-medium text-neutral-900" aria-live="polite">
           {value} {unit}
         </span>
-        <div className="flex items-center gap-2">
-          <button type="button" aria-label={`Decrease ${label}`} disabled={value <= min} onClick={() => onChange(Math.max(min, value - 1))} className={btn}>
-            <Minus size={14} />
+        <div className="flex items-center gap-1.5">
+          <button
+            type="button"
+            aria-label={`Decrease ${label}`}
+            disabled={value <= min}
+            onClick={() => onChange(Math.max(min, value - 1))}
+            className="flex h-8 w-8 items-center justify-center border border-neutral-300 bg-white text-neutral-700 transition hover:border-neutral-900 hover:text-neutral-900 disabled:opacity-30 disabled:hover:border-neutral-300"
+          >
+            <Minus size={13} />
           </button>
-          <button type="button" aria-label={`Increase ${label}`} disabled={value >= max} onClick={() => onChange(Math.min(max, value + 1))} className={btn}>
-            <Plus size={14} />
+          <button
+            type="button"
+            aria-label={`Increase ${label}`}
+            disabled={value >= max}
+            onClick={() => onChange(Math.max(max, value + 1))}
+            className="flex h-8 w-8 items-center justify-center border border-neutral-300 bg-white text-neutral-700 transition hover:border-neutral-900 hover:text-neutral-900 disabled:opacity-30 disabled:hover:border-neutral-300"
+          >
+            <Plus size={13} />
           </button>
         </div>
       </div>
@@ -56,11 +96,49 @@ function Counter({ label, unit, value, onChange, min, max, icon: Icon }) {
   );
 }
 
-function SectionHeading({ title, text, className = "" }) {
+function SectionHeading({
+  overline,
+  titlePrimary,
+  titleAccent,
+  text,
+  className = "",
+  align = "left",
+}) {
   return (
-    <div className={className}>
-      <h2 className="text-[34px] font-extrabold leading-[1.08] tracking-[-0.03em] text-[#211F1A] sm:text-5xl">{title}</h2>
-      <p className="mt-3 max-w-xl text-base leading-7 text-[#77746C] sm:text-lg">{text}</p>
+    <div
+      className={`${className} ${
+        align === "center" ? "text-center mx-auto" : ""
+      }`}
+    >
+      {overline && (
+        <div
+          className={`flex items-center gap-3 mb-4 ${
+            align === "center" ? "justify-center" : ""
+          }`}
+        >
+          <span className="w-8 h-px bg-neutral-400" />
+          <span className="text-[11px] font-medium uppercase tracking-[0.24em] text-neutral-500">
+            {overline}
+          </span>
+        </div>
+      )}
+      <h2 className="font-editorial-serif tracking-[-0.02em] leading-[1.04] text-[34px] sm:text-[46px] lg:text-[54px] text-neutral-900 font-normal">
+        <span>{titlePrimary}</span>{" "}
+        {titleAccent && (
+          <span className="italic text-[#C5A059] font-normal font-editorial-serif">
+            {titleAccent}
+          </span>
+        )}
+      </h2>
+      {text && (
+        <p
+          className={`mt-4 text-[15px] sm:text-base leading-[1.7] text-neutral-600 font-normal ${
+            align === "center" ? "mx-auto max-w-xl" : "max-w-xl"
+          }`}
+        >
+          {text}
+        </p>
+      )}
     </div>
   );
 }
@@ -77,7 +155,6 @@ export default function Home() {
   const [travelType, setTravelType] = useState("Couple");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [heroOk, setHeroOk] = useState(true);
 
   useEffect(() => {
     if (!hash) return;
@@ -86,7 +163,9 @@ export default function Home() {
   }, [hash]);
 
   function toggleInterest(name) {
-    setInterests((c) => (c.includes(name) ? c.filter((i) => i !== name) : [...c, name]));
+    setInterests((c) =>
+      c.includes(name) ? c.filter((i) => i !== name) : [...c, name]
+    );
     setError("");
   }
 
@@ -96,7 +175,8 @@ export default function Home() {
     setError("");
 
     if (!destination.trim()) return setError("Please enter your destination.");
-    if (!interests.length) return setError("Please select at least one interest.");
+    if (!interests.length)
+      return setError("Please select at least one interest.");
     const numericBudget = Number(budget);
     if (!Number.isFinite(numericBudget) || numericBudget <= 0)
       return setError("Please enter a valid budget greater than zero.");
@@ -119,8 +199,8 @@ export default function Home() {
           (err.code === "ECONNABORTED"
             ? "Trip generation is taking longer than expected. Please try again."
             : !err.response
-              ? "Cannot connect to the server. Check your backend and API URL."
-              : "Unable to generate your trip. Please try again.")
+            ? "Cannot connect to the server. Check your backend and API URL."
+            : "Unable to generate your trip. Please try again.")
       );
     } finally {
       setLoading(false);
@@ -133,93 +213,187 @@ export default function Home() {
     scrollToId("planner");
   }
 
-  const ctaPrimary =
-    "group inline-flex h-[52px] items-center gap-3 rounded-full bg-[#FFC943] pl-6 pr-1.5 text-[15px] font-bold text-[#211F1A] transition-colors hover:bg-[#F1B82D] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#211F1A]";
-  const arrowDisc = "flex h-10 w-10 items-center justify-center rounded-full bg-white";
-  const arrowMove = "transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none";
-
   return (
-    <div id="top" className="min-h-screen bg-[#F7F4EC] font-['Manrope','DM_Sans',system-ui,sans-serif] text-[#211F1A]">
+    <div id="top" className="relative min-h-screen bg-[#FAF9F6] text-[#1A1A1A]">
+      {/* Architectural vertical guide lines */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-7xl px-6 sm:px-12"
+      >
+        <div className="grid h-full w-full grid-cols-4 sm:grid-cols-6 lg:grid-cols-12">
+          <div className="border-r border-neutral-900/[0.035] h-full" />
+          <div className="border-r border-neutral-900/[0.035] h-full hidden sm:block" />
+          <div className="border-r border-neutral-900/[0.035] h-full" />
+          <div className="border-r border-neutral-900/[0.035] h-full hidden lg:block" />
+          <div className="border-r border-neutral-900/[0.035] h-full hidden sm:block" />
+          <div className="border-r border-neutral-900/[0.035] h-full" />
+          <div className="border-r border-neutral-900/[0.035] h-full hidden lg:block" />
+          <div className="border-r border-neutral-900/[0.035] h-full" />
+          <div className="border-r border-neutral-900/[0.035] h-full hidden sm:block" />
+          <div className="border-r border-neutral-900/[0.035] h-full hidden lg:block" />
+          <div className="border-r border-neutral-900/[0.035] h-full" />
+        </div>
+      </div>
+
       <Navbar />
 
-      {/* Hero */}
-      <section className="relative mx-2 mt-2 flex min-h-[calc(100svh-1rem)] items-end overflow-hidden rounded-[24px] bg-[#E9DFC8] sm:mx-3 sm:mt-3 sm:rounded-[28px]">
-        {heroOk && (
-          <img
-            src={HERO_IMAGE}
-            alt="Cliffside coastal town overlooking the sea at golden hour"
-            fetchPriority="high"
-            onError={() => setHeroOk(false)}
-            className="absolute inset-0 h-full w-full object-cover object-center"
-          />
-        )}
-        <div
-          aria-hidden="true"
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(90deg, rgba(247,244,236,0.86) 0%, rgba(247,244,236,0.45) 52%, rgba(247,244,236,0) 100%), linear-gradient(0deg, rgba(247,244,236,0.5) 0%, rgba(247,244,236,0) 45%)",
-          }}
-        />
-        <div className="relative z-10 w-full px-5 pb-12 pt-36 sm:px-[4.5vw] sm:pb-16">
-          <div className="max-w-[780px]">
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#E7E1D5] bg-[#FDFBF6]/90 px-3.5 py-2 text-xs font-semibold tracking-wide text-[#211F1A]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#FFC943]" />
-              ✦ YOUR NEXT ADVENTURE STARTS HERE
-            </span>
-            <h1 className="mt-6 text-[42px] font-extrabold leading-[1.02] tracking-[-0.04em] sm:text-[64px] lg:text-[76px]">
-              Travel smarter.
-              <br />
-              Discover more.
+      {/* Hero Section */}
+      <section className="relative z-10 mx-auto max-w-7xl px-6 pt-24 pb-16 sm:px-12 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24">
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
+          {/* Left Column: Exact Typography Aesthetic */}
+          <div className="lg:col-span-7">
+            {/* Overline with fine rule line */}
+            <div className="mb-6 flex items-center gap-3 sm:mb-8">
+              <span className="h-px w-8 bg-neutral-400 sm:w-12" />
+              <span className="text-[11px] font-medium uppercase tracking-[0.24em] text-neutral-500 sm:text-[12px]">
+                EDITORIAL / REFERENCE GUIDE
+              </span>
+            </div>
+
+            {/* Exact Serif Headline */}
+            <h1 className="font-editorial-serif tracking-[-0.02em] leading-[0.93]">
+              <span className="block text-[62px] font-normal text-neutral-900 sm:text-[88px] lg:text-[104px]">
+                Curated
+              </span>
+              <span className="mt-1 block font-editorial-serif text-[62px] font-normal italic text-[#C5A059] sm:mt-2 sm:text-[88px] lg:text-[104px]">
+                Excellence
+              </span>
             </h1>
-            <p className="mt-6 max-w-[540px] text-base leading-7 text-[#4d4a43] sm:text-lg">
-              Create personalized travel itineraries in minutes, discover incredible places, and plan every detail of your next adventure with AI.
+
+            {/* Editorial Body Text */}
+            <p className="mt-8 max-w-lg text-[15px] font-normal leading-[1.75] text-neutral-600 sm:mt-10 sm:text-[17px]">
+              Luxury isn't about adding decoration—it's about removing
+              everything unnecessary and perfecting what remains. Every element
+              must feel intentional and considered.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a href="#planner" onClick={(e) => { e.preventDefault(); scrollToId("planner"); }} className={ctaPrimary + " justify-between sm:justify-start"}>
-                Plan my trip
-                <span className={arrowDisc}><ArrowRight size={17} className={arrowMove} /></span>
+
+            {/* Architectural Actions */}
+            <div className="mt-10 flex flex-wrap items-center gap-4 sm:mt-12">
+              <a
+                href="#planner"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToId("planner");
+                }}
+                className="group inline-flex items-center justify-center gap-3 border border-neutral-900 bg-neutral-900 px-7 py-3.5 text-[11px] font-medium uppercase tracking-[0.22em] text-white transition-all hover:bg-neutral-800"
+              >
+                Plan My Journey
+                <ArrowRight
+                  size={14}
+                  className="transition-transform group-hover:translate-x-1"
+                />
               </a>
-              <a href="#destinations" onClick={(e) => { e.preventDefault(); scrollToId("destinations"); }} className="group inline-flex h-[52px] items-center justify-center gap-2 rounded-full bg-[#211F1A] px-6 text-[15px] font-semibold text-white transition-colors hover:bg-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#211F1A]">
-                Explore destinations
-                <ArrowRight size={16} className={arrowMove} />
+
+              <a
+                href="#destinations"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToId("destinations");
+                }}
+                className="inline-flex items-center justify-center border border-neutral-300 bg-transparent px-7 py-3.5 text-[11px] font-medium uppercase tracking-[0.22em] text-neutral-800 transition-colors hover:border-neutral-900 hover:text-neutral-950"
+              >
+                View Sanctuaries
               </a>
+            </div>
+          </div>
+
+          {/* Right Column: Framed Editorial Photography */}
+          <div className="lg:col-span-5">
+            <div className="relative flex flex-col items-start lg:items-end">
+              <div className="relative aspect-[4/5] w-full max-w-[480px] overflow-hidden border border-neutral-200/80 bg-neutral-200 shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
+                <img
+                  src={HERO_IMAGE}
+                  alt="Curated travel retreat architecture"
+                  fetchPriority="high"
+                  className="h-full w-full object-cover object-center grayscale contrast-[1.08] transition-all duration-700 hover:grayscale-0"
+                />
+              </div>
+              <div className="mt-4 flex w-full max-w-[480px] items-center gap-2.5 text-left">
+                <span className="h-px w-5 shrink-0 bg-neutral-400" />
+                <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-neutral-500 sm:text-[11px]">
+                  EXQUISITE RESTRAINT IN MODERN LIVING SPACES.
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Planner */}
-      <section id="planner" className="scroll-mt-24 px-5 py-20 sm:px-8 sm:py-28">
-        <div className="mx-auto max-w-[920px]">
-          <SectionHeading title="Your trip, your way." text="Tell us what you love. We'll help plan the rest." className="mb-10 text-center [&>p]:mx-auto" />
+      {/* Planner Section */}
+      <section
+        id="planner"
+        className="relative z-10 scroll-mt-24 border-t border-neutral-200/60 px-6 py-20 sm:px-12 sm:py-28"
+      >
+        <div className="mx-auto max-w-4xl">
+          <SectionHeading
+            overline="BESPOKE ENGINE / PARAMETERS"
+            titlePrimary="Intelligent"
+            titleAccent="Curation."
+            text="Articulate your destination, duration, and financial boundaries. Our intelligence arranges a seamless day-by-day expedition."
+            align="center"
+            className="mb-14"
+          />
 
-          <form onSubmit={handleSubmit} noValidate className="space-y-6 rounded-[28px] border border-[#E7E1D5] bg-white p-5 shadow-[0_20px_60px_rgba(33,31,26,0.06)] sm:p-10">
-            <div className="grid gap-6 md:grid-cols-2">
+          <form
+            onSubmit={handleSubmit}
+            noValidate
+            className="border border-neutral-200/90 bg-white p-6 shadow-[0_24px_60px_-15px_rgba(0,0,0,0.04)] sm:p-12"
+          >
+            <div className="grid gap-7 md:grid-cols-2">
               <div className="md:col-span-2">
-                <label htmlFor="destination" className="mb-2 flex items-center gap-2 text-sm font-semibold">
-                  <MapPin size={16} className="text-[#77746C]" /> Destination
+                <label
+                  htmlFor="destination"
+                  className="mb-2.5 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-500"
+                >
+                  <MapPin size={14} className="text-neutral-400" /> Target
+                  Destination
                 </label>
                 <input
                   id="destination"
                   maxLength={120}
                   value={destination}
                   disabled={loading}
-                  onChange={(e) => { setDestination(e.target.value); setError(""); }}
-                  placeholder="Try Goa, Bali or the Swiss Alps"
-                  className={field + " h-[54px] px-4"}
+                  onChange={(e) => {
+                    setDestination(e.target.value);
+                    setError("");
+                  }}
+                  placeholder="e.g. Kyoto, Amalfi Coast, Swiss Alps"
+                  className="h-[52px] w-full border border-neutral-200 bg-[#FAF9F6] px-4 text-[14px] text-neutral-900 outline-none transition placeholder:text-neutral-400 focus:border-neutral-900 focus:bg-white"
                 />
               </div>
 
-              <Counter label="Number of days" unit={days === 1 ? "day" : "days"} value={days} min={1} max={30} onChange={setDays} icon={CalendarDays} />
-              <Counter label="Travelers" unit={travelers === 1 ? "person" : "people"} value={travelers} min={1} max={20} onChange={setTravelers} icon={Users} />
+              <Counter
+                label="Duration of stay"
+                unit={days === 1 ? "day" : "days"}
+                value={days}
+                min={1}
+                max={30}
+                onChange={setDays}
+                icon={CalendarDays}
+              />
+
+              <Counter
+                label="Party size"
+                unit={travelers === 1 ? "traveler" : "travelers"}
+                value={travelers}
+                min={1}
+                max={20}
+                onChange={setTravelers}
+                icon={Users}
+              />
 
               <div>
-                <label htmlFor="budget" className="mb-2 flex items-center gap-2 text-sm font-semibold">
-                  <Wallet size={16} className="text-[#77746C]" /> Total budget (INR)
+                <label
+                  htmlFor="budget"
+                  className="mb-2.5 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-500"
+                >
+                  <Wallet size={14} className="text-neutral-400" /> Total Budget
+                  (INR)
                 </label>
                 <div className="relative">
-                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#77746C]">₹</span>
+                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-neutral-400">
+                    ₹
+                  </span>
                   <input
                     id="budget"
                     type="number"
@@ -228,33 +402,54 @@ export default function Home() {
                     max="100000000"
                     value={budget}
                     disabled={loading}
-                    onChange={(e) => { setBudget(e.target.value); setError(""); }}
-                    className={field + " h-[54px] pl-9 pr-4 font-semibold"}
+                    onChange={(e) => {
+                      setBudget(e.target.value);
+                      setError("");
+                    }}
+                    className="h-[52px] w-full border border-neutral-200 bg-[#FAF9F6] pl-8 pr-4 text-[14px] font-medium text-neutral-900 outline-none transition placeholder:text-neutral-400 focus:border-neutral-900 focus:bg-white"
                   />
                 </div>
-                <p className="mt-2 text-xs text-[#77746C]">
-                  {Number(budget) > 0 ? `About ${money(Number(budget) / travelers)} per traveler` : "Enter your total trip budget"}
+                <p className="mt-2 text-[11px] tracking-wide text-neutral-400">
+                  {Number(budget) > 0
+                    ? `Estimated ${money(
+                        Number(budget) / travelers
+                      )} per traveler`
+                    : "Enter total expedition allocation"}
                 </p>
               </div>
 
               <div>
-                <label htmlFor="travelType" className="mb-2 flex items-center gap-2 text-sm font-semibold">
-                  <Compass size={16} className="text-[#77746C]" /> Travel type
+                <label
+                  htmlFor="travelType"
+                  className="mb-2.5 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-500"
+                >
+                  <Compass size={14} className="text-neutral-400" /> Travel Dynamic
                 </label>
                 <div className="relative">
-                  <select id="travelType" value={travelType} disabled={loading} onChange={(e) => setTravelType(e.target.value)} className={field + " h-[54px] appearance-none px-4 pr-10"}>
-                    <option>Solo</option>
+                  <select
+                    id="travelType"
+                    value={travelType}
+                    disabled={loading}
+                    onChange={(e) => setTravelType(e.target.value)}
+                    className="h-[52px] w-full appearance-none border border-neutral-200 bg-[#FAF9F6] px-4 pr-10 text-[14px] text-neutral-900 outline-none transition focus:border-neutral-900 focus:bg-white"
+                  >
+                    <option>Solo Expedition</option>
                     <option>Couple</option>
-                    <option>Friends</option>
+                    <option>Intimate Friends</option>
                     <option>Family</option>
                   </select>
-                  <ChevronDown size={16} className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#77746C]" />
+                  <ChevronDown
+                    size={15}
+                    className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400"
+                  />
                 </div>
               </div>
             </div>
 
-            <fieldset>
-              <legend className="mb-3 text-sm font-semibold">Interests</legend>
+            <fieldset className="mt-8 border-t border-neutral-200/60 pt-7">
+              <legend className="mb-3.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-500">
+                Interests & Focus
+              </legend>
               <div className="flex flex-wrap gap-2.5">
                 {interestsList.map(({ name, icon: Icon }) => {
                   const on = interests.includes(name);
@@ -265,11 +460,15 @@ export default function Home() {
                       aria-pressed={on}
                       disabled={loading}
                       onClick={() => toggleInterest(name)}
-                      className={`inline-flex h-11 items-center gap-2 rounded-full border px-4 text-sm font-medium transition ${
-                        on ? "border-[#211F1A] bg-[#FFF0C5] text-[#211F1A]" : "border-[#E7E1D5] bg-[#FDFBF6] text-[#77746C] hover:border-[#211F1A]/40"
+                      className={`inline-flex h-10 items-center gap-2.5 border px-4 text-[11px] font-medium tracking-[0.14em] uppercase transition ${
+                        on
+                          ? "border-neutral-900 bg-neutral-900 text-white"
+                          : "border-neutral-200 bg-[#FAF9F6] text-neutral-600 hover:border-neutral-900 hover:text-neutral-900"
                       }`}
                     >
-                      <Icon size={16} /> {name} {on && <Check size={14} />}
+                      <Icon size={14} className={on ? "text-[#C5A059]" : ""} />
+                      {name}
+                      {on && <Check size={12} className="text-[#C5A059]" />}
                     </button>
                   );
                 })}
@@ -277,46 +476,101 @@ export default function Home() {
             </fieldset>
 
             {error && (
-              <div role="alert" className="flex gap-3 rounded-2xl border border-[#E8C4B8] bg-[#FBEFEA] p-4 text-sm leading-6 text-[#8A3B27]">
-                <AlertCircle size={18} className="mt-0.5 shrink-0" />
+              <div
+                role="alert"
+                className="mt-6 flex items-center gap-3 border border-red-200 bg-red-50/50 p-4 text-[13px] text-red-800"
+              >
+                <AlertCircle size={16} className="shrink-0" />
                 <span>{error}</span>
               </div>
             )}
 
-            <button type="submit" disabled={loading} aria-busy={loading} className={ctaPrimary + " w-full justify-between disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"}>
-              {loading ? (
-                <>Creating your itinerary… <span className={arrowDisc}><LoaderCircle size={17} className="animate-spin motion-reduce:animate-none" /></span></>
-              ) : (
-                <>Generate my itinerary <span className={arrowDisc}><ArrowRight size={17} className={arrowMove} /></span></>
-              )}
-            </button>
+            <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <button
+                type="submit"
+                disabled={loading}
+                aria-busy={loading}
+                className="group inline-flex items-center justify-center gap-3 border border-neutral-900 bg-neutral-900 px-8 py-4 text-[11px] font-medium uppercase tracking-[0.22em] text-white transition hover:bg-neutral-800 disabled:opacity-50"
+              >
+                {loading ? (
+                  <>
+                    <span>Orchestrating Dossier…</span>
+                    <LoaderCircle size={14} className="animate-spin" />
+                  </>
+                ) : (
+                  <>
+                    <span>Generate Itinerary — v1.0</span>
+                    <ArrowRight
+                      size={14}
+                      className="transition-transform group-hover:translate-x-1"
+                    />
+                  </>
+                )}
+              </button>
 
-            {loading && (
-              <p role="status" aria-live="polite" className="text-sm leading-6 text-[#77746C]">
-                Building your day-by-day plan. This can take a little while, so please keep this page open.
-              </p>
-            )}
+              {loading && (
+                <p
+                  role="status"
+                  aria-live="polite"
+                  className="text-[12px] font-normal text-neutral-500"
+                >
+                  Synthesizing venues, routes, and timing with restraint.
+                </p>
+              )}
+            </div>
           </form>
         </div>
       </section>
 
-      {/* Destinations */}
-      <section id="destinations" className="scroll-mt-24 px-5 pb-20 sm:px-8 sm:pb-28">
-        <div className="mx-auto max-w-[1200px]">
-          <SectionHeading title="Find your next favorite place." text="From quiet coastal escapes to unforgettable mountain adventures." className="mb-10" />
-          <ul className="grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-            {DESTINATIONS.map((d) => (
+      {/* Destinations Section */}
+      <section
+        id="destinations"
+        className="relative z-10 scroll-mt-24 border-t border-neutral-200/60 px-6 py-20 sm:px-12 sm:py-28"
+      >
+        <div className="mx-auto max-w-7xl">
+          <SectionHeading
+            overline="CURATED ARCHIVE / GLOBAL RETREATS"
+            titlePrimary="Enduring"
+            titleAccent="Sanctuaries."
+            text="Quiet coastal promontories and high alpine preserves where landscape and architecture exist in pure harmony."
+            className="mb-14"
+          />
+
+          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {DESTINATIONS.map((d, index) => (
               <li key={d.name}>
-                <button type="button" onClick={() => selectDestination(d.name)} className="group relative block aspect-[4/5] w-full overflow-hidden rounded-[22px] bg-[#E9DFC8] text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#211F1A] sm:aspect-[5/6]">
-                  <img src={d.image} alt={`${d.name} landscape`} loading="lazy" onError={(e) => (e.currentTarget.style.display = "none")} className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100" />
-                  <div aria-hidden="true" className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(25,23,18,0.62) 0%, rgba(25,23,18,0.18) 38%, rgba(25,23,18,0) 60%)" }} />
-                  <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-5 text-white">
-                    <span>
-                      <span className="block text-xl font-bold tracking-tight">{d.name}</span>
-                      <span className="mt-1 block text-sm text-white/85">{d.phrase}</span>
+                <button
+                  type="button"
+                  onClick={() => selectDestination(d.name)}
+                  className="group relative block aspect-[4/5] w-full overflow-hidden border border-neutral-200/80 bg-neutral-100 text-left transition focus-visible:outline-none"
+                >
+                  <img
+                    src={d.image}
+                    alt={`${d.name} landscape`}
+                    loading="lazy"
+                    onError={(e) => (e.currentTarget.style.display = "none")}
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent transition-opacity group-hover:from-black/85"
+                  />
+                  <div className="absolute inset-x-0 top-0 p-5">
+                    <span className="font-editorial-serif text-[13px] tracking-[0.2em] text-white/70">
+                      0{index + 1}
                     </span>
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#FFC943] text-[#211F1A]">
-                      <ArrowRight size={16} className={arrowMove} />
+                  </div>
+                  <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-6 text-white">
+                    <div>
+                      <span className="block font-editorial-serif text-2xl font-normal tracking-tight">
+                        {d.name}
+                      </span>
+                      <span className="mt-1 block text-[11px] uppercase tracking-[0.18em] text-[#C5A059]">
+                        {d.phrase}
+                      </span>
+                    </div>
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center border border-white/30 bg-white/10 text-white backdrop-blur-sm transition-colors group-hover:border-white group-hover:bg-white group-hover:text-neutral-900">
+                      <ArrowRight size={14} />
                     </span>
                   </div>
                 </button>
@@ -326,43 +580,111 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How it works */}
-      <section id="how-it-works" className="scroll-mt-24 border-y border-[#E7E1D5] bg-[#FDFBF6] px-5 py-20 sm:px-8 sm:py-28">
-        <div className="mx-auto max-w-[1100px]">
-          <SectionHeading title="Three steps to a plan." text="No spreadsheets, no endless tabs." className="mb-12" />
+      {/* How it works / Methodology */}
+      <section
+        id="how-it-works"
+        className="relative z-10 scroll-mt-24 border-t border-neutral-200/60 bg-[#F4F3F0]/50 px-6 py-20 sm:px-12 sm:py-28"
+      >
+        <div className="mx-auto max-w-7xl">
+          <SectionHeading
+            overline="METHODOLOGY / THREE MOVEMENTS"
+            titlePrimary="Effortless By"
+            titleAccent="Design."
+            text="Stripped of superfluous distraction, leaving only an intentional, curated voyage."
+            className="mb-16"
+          />
+
           <ol className="grid gap-10 md:grid-cols-3 md:gap-12">
-            {steps.map(({ icon: Icon, title, text }, i) => (
-              <li key={title}>
-                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#FFF0C5] text-[#211F1A]"><Icon size={22} /></span>
-                <h3 className="mt-5 text-xl font-bold tracking-tight">
-                  <span className="sr-only">Step {i + 1}: </span>{title}
+            {steps.map(({ num, title, text }) => (
+              <li
+                key={title}
+                className="border-t border-neutral-300/80 pt-6 transition hover:border-neutral-900"
+              >
+                <span className="font-editorial-serif text-2xl font-normal italic text-[#C5A059]">
+                  {num}
+                </span>
+                <h3 className="mt-4 font-editorial-serif text-xl font-normal text-neutral-900">
+                  {title}
                 </h3>
-                <p className="mt-2 leading-7 text-[#77746C]">{text}</p>
+                <p className="mt-3 text-[14px] font-normal leading-[1.7] text-neutral-600">
+                  {text}
+                </p>
               </li>
             ))}
           </ol>
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="px-5 py-20 sm:px-8 sm:py-28">
-        <div className="mx-auto flex max-w-[1100px] flex-col items-start justify-between gap-8 rounded-[28px] bg-[#211F1A] p-8 text-white sm:p-14 md:flex-row md:items-center">
-          <div>
-            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-[-0.03em] sm:text-5xl">Ready when you are.</h2>
-            <p className="mt-3 max-w-md text-white/70">Your first itinerary is a few details away.</p>
+      {/* Final Editorial Call to Action */}
+      <section className="relative z-10 px-6 py-20 sm:px-12 sm:py-28">
+        <div className="mx-auto max-w-7xl border border-neutral-900 bg-neutral-900 p-8 text-white sm:p-16">
+          <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-end">
+            <div>
+              <div className="mb-4 flex items-center gap-3">
+                <span className="h-px w-8 bg-[#C5A059]" />
+                <span className="text-[11px] font-medium uppercase tracking-[0.24em] text-[#C5A059]">
+                  COMMENCE / VOYAGE
+                </span>
+              </div>
+              <h2 className="font-editorial-serif text-[36px] font-normal tracking-[-0.02em] sm:text-[54px]">
+                Your Journey,{" "}
+                <span className="italic text-[#C5A059]">Considered.</span>
+              </h2>
+              <p className="mt-3 max-w-md text-[14px] text-neutral-300">
+                Quiet luxury is knowing every hour has been thoughtfully
+                composed. Begin your itinerary in seconds.
+              </p>
+            </div>
+            <a
+              href="#planner"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToId("planner");
+              }}
+              className="inline-flex items-center gap-3 border border-white bg-white px-8 py-3.5 text-[11px] font-medium uppercase tracking-[0.22em] text-neutral-900 transition hover:bg-neutral-100"
+            >
+              Start Planning
+              <ArrowRight size={14} />
+            </a>
           </div>
-          <a href="#planner" onClick={(e) => { e.preventDefault(); scrollToId("planner"); }} className={ctaPrimary + " shrink-0"}>
-            Plan my trip <span className={arrowDisc}><ArrowRight size={17} className={arrowMove} /></span>
-          </a>
         </div>
       </section>
 
-      <footer className="border-t border-[#E7E1D5] px-5 py-10 sm:px-8">
-        <div className="mx-auto flex max-w-[1100px] flex-col justify-between gap-6 text-sm text-[#77746C] sm:flex-row sm:items-center">
-          <p><span className="font-bold text-[#211F1A]">Wayfinder AI</span> · AI-generated travel itineraries. Check details before you book.</p>
-          <ul className="flex flex-wrap gap-6">
-            {[["Explore", "planner"], ["Destinations", "destinations"], ["How it works", "how-it-works"]].map(([l, id]) => (
-              <li key={id}><a href={`#${id}`} onClick={(e) => { e.preventDefault(); scrollToId(id); }} className="hover:text-[#211F1A]">{l}</a></li>
+      {/* Editorial Footer */}
+      <footer className="relative z-10 border-t border-neutral-200/80 px-6 py-12 sm:px-12">
+        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-8 sm:flex-row sm:items-center">
+          <div className="flex items-center tracking-[0.2em]">
+            <span className="font-editorial-serif text-sm font-medium uppercase text-neutral-900">
+              ROAM
+            </span>
+            <span className="mx-2 text-xs font-light text-neutral-300">/</span>
+            <span className="font-editorial-serif text-sm font-medium uppercase text-neutral-900">
+              WISE
+            </span>
+            <span className="ml-4 text-[12px] text-neutral-400">
+              · Curated travel intelligence.
+            </span>
+          </div>
+
+          <ul className="flex flex-wrap gap-8 text-[11px] font-medium uppercase tracking-[0.22em] text-neutral-500">
+            {[
+              ["Philosophy", "top"],
+              ["Planner", "planner"],
+              ["Destinations", "destinations"],
+              ["Methodology", "how-it-works"],
+            ].map(([l, id]) => (
+              <li key={id}>
+                <a
+                  href={`#${id}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToId(id);
+                  }}
+                  className="transition hover:text-neutral-900"
+                >
+                  {l}
+                </a>
+              </li>
             ))}
           </ul>
         </div>

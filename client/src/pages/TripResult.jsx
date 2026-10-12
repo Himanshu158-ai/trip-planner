@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -41,8 +40,10 @@ export default function TripResult() {
 
   if (!trip) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#f5f4f0]">
-        <p className="text-sm text-[#718077]">Loading your itinerary...</p>
+      <main className="flex min-h-screen items-center justify-center bg-[#FAF9F6]">
+        <p className="font-editorial-serif text-lg italic text-[#C5A059]">
+          Retrieving curated dossier…
+        </p>
       </main>
     );
   }
@@ -54,171 +55,237 @@ export default function TripResult() {
   const currency = trip.budget?.currency || "INR";
 
   return (
-    <main className="min-h-screen bg-[#f5f4f0] px-5 py-8 text-[#18352b] sm:px-8">
-      <div className="mx-auto max-w-7xl">
+    <main className="relative min-h-screen bg-[#FAF9F6] px-6 py-12 text-[#1A1A1A] sm:px-12">
+      {/* Subtle vertical architectural grid */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-7xl px-6 sm:px-12"
+      >
+        <div className="grid h-full w-full grid-cols-4 sm:grid-cols-6 lg:grid-cols-12">
+          <div className="border-r border-neutral-900/[0.035] h-full" />
+          <div className="border-r border-neutral-900/[0.035] h-full hidden sm:block" />
+          <div className="border-r border-neutral-900/[0.035] h-full" />
+          <div className="border-r border-neutral-900/[0.035] h-full hidden lg:block" />
+          <div className="border-r border-neutral-900/[0.035] h-full hidden sm:block" />
+          <div className="border-r border-neutral-900/[0.035] h-full" />
+        </div>
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-7xl">
         <button
           onClick={() => navigate("/")}
-          className="mb-6 flex items-center gap-2 text-sm font-semibold text-[#607267] hover:text-[#214b3a]"
+          className="group mb-8 inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.22em] text-neutral-500 transition hover:text-neutral-900"
         >
-          <ArrowLeft size={17} />
-          Back to planner
+          <ArrowLeft
+            size={14}
+            className="transition-transform group-hover:-translate-x-1"
+          />
+          Return to Curator
         </button>
 
-        <section className="rounded-3xl bg-[#214b3a] p-6 text-white sm:p-10">
-          <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-[#d6e5ce]">
-            <Sparkles size={15} />
-            YOUR PERSONALIZED TRIP
-          </span>
+        {/* Dossier Hero Banner */}
+        <section className="border border-neutral-900 bg-neutral-900 p-8 text-white sm:p-14">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-8 bg-[#C5A059]" />
+            <span className="text-[11px] font-medium uppercase tracking-[0.24em] text-[#C5A059]">
+              CONFIRMED DOSSIER / EXPEDITION ARCHIVE
+            </span>
+          </div>
 
-          <h1 className="mt-4 text-3xl font-semibold sm:text-5xl">
-            {trip.destination}
+          <h1 className="mt-5 font-editorial-serif text-4xl font-normal tracking-tight sm:text-6xl lg:text-7xl">
+            {trip.destination}{" "}
+            <span className="block font-editorial-serif text-2xl font-normal italic text-[#C5A059] sm:inline sm:text-4xl">
+              · Tailored Itinerary
+            </span>
           </h1>
 
-          <p className="mt-3 text-sm text-[#d5e0d4]">
-            Your journey, thoughtfully planned.
+          <p className="mt-4 max-w-xl text-[14px] leading-relaxed text-neutral-300">
+            A harmonious sequence of vetted experiences, paced with restraint
+            and curated for seamless discovery.
           </p>
 
-          <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="mt-10 grid grid-cols-2 gap-4 border-t border-neutral-800 pt-8 sm:grid-cols-4">
             {[
               {
-                label: "Duration",
-                value: `${trip.duration ?? itinerary.length} days`,
+                label: "DURATION",
+                value: `${trip.duration ?? itinerary.length} Days`,
                 icon: CalendarDays,
               },
               {
-                label: "Travelers",
-                value: trip.travelers,
+                label: "TRAVELERS",
+                value: `${trip.travelers} Guests`,
                 icon: Users,
               },
               {
-                label: "Travel type",
+                label: "DYNAMIC",
                 value: trip.travelType,
                 icon: MapPin,
               },
               {
-                label: "Total budget",
+                label: "TOTAL ALLOCATION",
                 value: money(trip.budget?.total, currency),
                 icon: Wallet,
               },
             ].map(({ label, value, icon: Icon }) => (
               <div
                 key={label}
-                className="rounded-2xl border border-white/15 bg-white/[0.07] p-4"
+                className="border border-neutral-800 bg-neutral-900/60 p-4 transition hover:border-neutral-700"
               >
-                <Icon size={19} className="text-[#c6d9bb]" />
-                <p className="mt-4 text-xs text-[#d5e0d4]">{label}</p>
-                <p className="mt-1 break-words font-semibold">{value}</p>
+                <div className="flex items-center justify-between text-[#C5A059]">
+                  <span className="text-[10px] font-medium tracking-[0.2em] text-neutral-400">
+                    {label}
+                  </span>
+                  <Icon size={14} />
+                </div>
+                <p className="mt-3 font-editorial-serif text-lg sm:text-xl font-normal text-white">
+                  {value}
+                </p>
               </div>
             ))}
           </div>
         </section>
 
-        <div className="mt-8 grid items-start gap-6 lg:grid-cols-[1fr_340px]">
+        <div className="mt-12 grid items-start gap-10 lg:grid-cols-[1fr_360px]">
+          {/* Main Day-by-Day Content */}
           <section>
-            <p className="text-xs font-bold tracking-widest text-[#82917e]">
-              YOUR JOURNEY
-            </p>
+            <div className="flex items-center gap-3">
+              <span className="h-px w-6 bg-neutral-400" />
+              <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-neutral-500">
+                CHRONOLOGY / ITINERARY
+              </p>
+            </div>
 
-            <h2 className="mt-2 text-2xl font-semibold">
-              Day-by-day itinerary
+            <h2 className="mt-2 font-editorial-serif text-3xl font-normal text-neutral-900 sm:text-4xl">
+              Day-by-Day <span className="italic text-[#C5A059]">Program</span>
             </h2>
 
-            <div className="mt-5 flex gap-2 overflow-x-auto pb-2">
+            {/* Day Selector Pills */}
+            <div className="mt-6 flex gap-2 overflow-x-auto pb-2">
               {itinerary.map((day) => (
                 <button
                   key={day.day}
                   onClick={() => setActiveDay(day.day)}
-                  className={`min-w-[75px] rounded-xl border px-4 py-3 text-left ${
+                  className={`min-w-[84px] border px-4 py-3 text-left transition ${
                     selectedDay?.day === day.day
-                      ? "border-[#315c43] bg-[#eaf0e5] text-[#214b3a]"
-                      : "border-[#e2e1d9] bg-[#fdfcf9] text-[#718077]"
+                      ? "border-neutral-900 bg-neutral-900 text-white"
+                      : "border-neutral-200 bg-white text-neutral-600 hover:border-neutral-900"
                   }`}
                 >
-                  <span className="block text-xs">DAY</span>
-                  <span className="mt-1 block text-lg font-semibold">
-                    {day.day}
+                  <span
+                    className={`block text-[10px] font-medium tracking-[0.2em] uppercase ${
+                      selectedDay?.day === day.day
+                        ? "text-[#C5A059]"
+                        : "text-neutral-400"
+                    }`}
+                  >
+                    Day
+                  </span>
+                  <span className="mt-1 block font-editorial-serif text-xl font-normal">
+                    0{day.day}
                   </span>
                 </button>
               ))}
             </div>
 
             {selectedDay && (
-              <section className="mt-3 rounded-2xl border border-[#e2e1d9] bg-[#fdfcf9] p-5 sm:p-7">
-                <p className="text-xs font-bold tracking-widest text-[#79966f]">
-                  DAY {selectedDay.day}
-                </p>
+              <section className="mt-4 border border-neutral-200/90 bg-white p-6 sm:p-9 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.03)]">
+                <div className="flex items-center justify-between border-b border-neutral-200/60 pb-4">
+                  <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#C5A059]">
+                    DAY 0{selectedDay.day}
+                  </span>
+                  <span className="text-[11px] uppercase tracking-wider text-neutral-400">
+                    {(selectedDay.activities || []).length} Movements
+                  </span>
+                </div>
 
-                <h3 className="mt-2 text-xl font-semibold">
+                <h3 className="mt-4 font-editorial-serif text-2xl font-normal text-neutral-900 sm:text-3xl">
                   {selectedDay.title}
                 </h3>
 
-                <div className="mt-6 space-y-4">
+                <div className="mt-8 space-y-5">
                   {(selectedDay.activities || []).map((activity, index) => (
                     <article
                       key={`${selectedDay.day}-${index}`}
-                      className="rounded-xl border border-[#e9e8e0] bg-[#f8f7f3] p-4"
+                      className="border border-neutral-200/80 bg-[#FAF9F6] p-5 transition hover:border-neutral-900"
                     >
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <span className="flex items-center gap-2 text-xs font-semibold text-[#54764a]">
-                          <Clock3 size={14} />
+                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200/50 pb-3">
+                        <span className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.16em] text-[#C5A059]">
+                          <Clock3 size={13} />
                           {activity.time}
                         </span>
-                        <span className="text-xs text-[#718077]">
+                        <span className="text-[11px] tracking-wide text-neutral-400">
                           {activity.estimatedDuration}
                         </span>
                       </div>
 
-                      <h4 className="mt-3 font-semibold">
+                      <h4 className="mt-3 font-editorial-serif text-xl font-normal text-neutral-900">
                         {activity.place}
                       </h4>
 
-                      <p className="mt-1 text-sm leading-6 text-[#718077]">
+                      <p className="mt-2 text-[14px] leading-relaxed text-neutral-600">
                         {activity.activity}
                       </p>
 
-                      <p className="mt-3 text-sm font-semibold text-[#315c43]">
-                        Estimated cost:{" "}
-                        {money(activity.estimatedCost, currency)}
-                      </p>
+                      <div className="mt-4 flex items-center justify-between pt-2">
+                        <span className="text-[11px] uppercase tracking-wider text-neutral-400">
+                          Estimated Outlay
+                        </span>
+                        <span className="text-sm font-semibold text-neutral-900">
+                          {money(activity.estimatedCost, currency)}
+                        </span>
+                      </div>
                     </article>
                   ))}
                 </div>
               </section>
             )}
 
-            <section className="mt-8 rounded-2xl border border-[#e2e1d9] bg-[#fdfcf9] p-5">
-              <h3 className="text-xl font-semibold">Travel tips</h3>
-              <ul className="mt-4 space-y-3">
+            {/* Travel Guidance */}
+            <section className="mt-8 border border-neutral-200/90 bg-white p-6 sm:p-8 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.03)]">
+              <div className="flex items-center gap-3">
+                <span className="h-px w-6 bg-[#C5A059]" />
+                <h3 className="text-[11px] font-medium uppercase tracking-[0.22em] text-neutral-500">
+                  CURATED NOTES & ADVISORIES
+                </h3>
+              </div>
+              <ul className="mt-5 space-y-3.5">
                 {(trip.travelTips || []).map((tip, index) => (
                   <li
                     key={index}
-                    className="border-b border-[#eeeee7] pb-3 text-sm leading-6 text-[#68766d] last:border-0 last:pb-0"
+                    className="flex items-start gap-3 border-b border-neutral-100 pb-3.5 text-[14px] leading-relaxed text-neutral-600 last:border-0 last:pb-0"
                   >
-                    {tip}
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#C5A059]" />
+                    <span>{tip}</span>
                   </li>
                 ))}
               </ul>
             </section>
           </section>
 
-          <aside className="rounded-2xl border border-[#e2e1d9] bg-[#fdfcf9] p-5 sm:p-6 lg:sticky lg:top-24">
-            <p className="text-sm text-[#78847b]">Estimated trip budget</p>
+          {/* Sticky Financial Allocation Dossier */}
+          <aside className="border border-neutral-200/90 bg-white p-6 sm:p-8 lg:sticky lg:top-28 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.03)]">
+            <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.22em] text-neutral-400">
+              <Wallet size={14} className="text-[#C5A059]" />
+              FINANCIAL AUDIT
+            </div>
 
-            <h2 className="mt-2 text-3xl font-semibold">
+            <p className="mt-3 text-xs text-neutral-500">Estimated Allocation</p>
+
+            <h2 className="mt-1 font-editorial-serif text-3xl font-normal text-neutral-900 sm:text-4xl">
               {money(trip.budget?.total, currency)}
             </h2>
 
-            <div className="mt-6 space-y-4">
+            <div className="mt-6 space-y-3 border-t border-neutral-200/60 pt-5">
               {Object.entries(trip.budget?.breakdown || {}).map(
                 ([category, amount]) => (
                   <div
                     key={category}
-                    className="flex items-center justify-between gap-3"
+                    className="flex items-center justify-between gap-3 text-[13px]"
                   >
-                    <span className="text-sm capitalize text-[#68766d]">
+                    <span className="capitalize tracking-wide text-neutral-500">
                       {category.replace(/([A-Z])/g, " $1")}
                     </span>
-                    <span className="text-sm font-semibold">
+                    <span className="font-medium text-neutral-900">
                       {money(amount, currency)}
                     </span>
                   </div>
@@ -226,9 +293,9 @@ export default function TripResult() {
               )}
             </div>
 
-            <div className="mt-6 border-t border-[#e2e1d9] pt-4 text-xs leading-5 text-[#879087]">
-              All costs are estimates. Verify availability and prices before
-              making reservations.
+            <div className="mt-6 border-t border-neutral-200/60 pt-4 text-[11px] leading-5 text-neutral-400">
+              All quotes are approximate references. Validate venue timings
+              prior to arrival.
             </div>
 
             <button
@@ -236,9 +303,9 @@ export default function TripResult() {
                 sessionStorage.removeItem("generatedTrip");
                 navigate("/");
               }}
-              className="mt-5 w-full rounded-xl bg-[#214b3a] px-4 py-3.5 text-sm font-semibold text-white transition hover:bg-[#17392b]"
+              className="mt-6 w-full border border-neutral-900 bg-neutral-900 py-3.5 text-[11px] font-medium uppercase tracking-[0.22em] text-white transition hover:bg-neutral-800"
             >
-              Plan another trip
+              Compose Another Journey
             </button>
           </aside>
         </div>

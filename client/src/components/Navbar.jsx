@@ -1,19 +1,28 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ArrowRight, Compass, Menu, X } from "lucide-react";
+import { ArrowRight, Menu, X } from "lucide-react";
 import { scrollToId } from "../utils/scroll";
 
 const links = [
-  { label: "Home", id: "top" },
-  { label: "Explore", id: "planner" },
-  { label: "Destinations", id: "destinations" },
-  { label: "How it works", id: "how-it-works" },
+  { label: "PHILOSOPHY", id: "top" },
+  { label: "PLANNER", id: "planner" },
+  { label: "DESTINATIONS", id: "destinations" },
+  { label: "METHODOLOGY", id: "how-it-works" },
 ];
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { pathname } = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -30,94 +39,97 @@ export default function Navbar() {
   }
 
   return (
-    <header className="fixed inset-x-0 top-4 z-40 px-4 sm:top-5">
-      <nav
-        aria-label="Primary"
-        className="mx-auto max-w-[1120px] rounded-[32px] border border-white/60 bg-white/35 shadow-[0_8px_32px_rgba(33,31,26,0.12),inset_0_1px_0_rgba(255,255,255,0.6)] backdrop-blur-xl backdrop-saturate-150"
-      >
-        <div className="flex h-[60px] items-center justify-between pl-4 pr-2 md:h-[64px] md:pl-5">
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? "border-b border-neutral-200/80 bg-[#FAF9F6]/90 backdrop-blur-md py-4"
+          : "border-b border-neutral-200/40 bg-[#FAF9F6]/60 backdrop-blur-sm py-6"
+      }`}
+    >
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 sm:px-12">
+        {/* Editorial Logo */}
+        <a
+          href="/#top"
+          onClick={(e) => go(e, "top")}
+          className="group flex items-center tracking-[0.24em] focus-visible:outline-none"
+        >
+          <span className="font-editorial-serif text-[17px] font-medium tracking-[0.22em] text-neutral-900 transition-colors group-hover:text-black">
+            ROAM
+          </span>
+          <span className="mx-2 text-[14px] font-light text-neutral-300">/</span>
+          <span className="font-editorial-serif text-[17px] font-medium tracking-[0.22em] text-neutral-900 transition-colors group-hover:text-black">
+            WISE
+          </span>
+        </a>
+
+        {/* Minimalist Centered Navigation */}
+        <ul className="hidden items-center gap-9 md:flex">
+          {links.map((l) => (
+            <li key={l.id}>
+              <a
+                href={`/#${l.id}`}
+                onClick={(e) => go(e, l.id)}
+                className="text-[11px] font-medium tracking-[0.24em] text-neutral-500 transition-colors hover:text-neutral-900"
+              >
+                {l.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        {/* Access Button */}
+        <div className="flex items-center gap-4">
           <a
-            href="/#top"
-            onClick={(e) => go(e, "top")}
-            className="flex items-center gap-2.5 rounded-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#211F1A]"
+            href="/#planner"
+            onClick={(e) => go(e, "planner")}
+            className="group hidden items-center justify-center border border-neutral-900 bg-transparent px-5 py-2 text-[11px] font-medium tracking-[0.22em] text-neutral-900 transition-all duration-300 hover:bg-neutral-900 hover:text-white sm:inline-flex"
           >
-            <span className="flex h-8 w-8 items-center justify-center rounded-[10px] bg-[#FFC943] text-[#211F1A]">
-              <Compass size={18} strokeWidth={2.4} />
-            </span>
-            <span className="text-[19px] font-extrabold tracking-[-0.03em] text-[#211F1A]">
-              RoamWise
-            </span>
+            Access v1.0
           </a>
 
-          <ul className="hidden items-center gap-8 md:flex">
+          <button
+            type="button"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            onClick={() => setOpen((o) => !o)}
+            className="flex h-10 w-10 items-center justify-center border border-neutral-300 text-neutral-900 transition hover:border-neutral-900 md:hidden"
+          >
+            {open ? <X size={18} /> : <Menu size={18} />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Drawer */}
+      {open && (
+        <div
+          id="mobile-menu"
+          className="border-b border-neutral-200 bg-[#FAF9F6] px-6 py-8 md:hidden"
+        >
+          <ul className="space-y-5">
             {links.map((l) => (
               <li key={l.id}>
                 <a
                   href={`/#${l.id}`}
                   onClick={(e) => go(e, l.id)}
-                  className="text-[14.5px] font-medium text-[#211F1A]/70 transition-colors hover:text-[#211F1A] focus-visible:text-[#211F1A]"
+                  className="block text-xs font-medium tracking-[0.24em] text-neutral-700 transition hover:text-neutral-900"
                 >
                   {l.label}
                 </a>
               </li>
             ))}
           </ul>
-
-          <div className="flex items-center gap-2">
+          <div className="mt-8 pt-6 border-t border-neutral-200/60">
             <a
               href="/#planner"
               onClick={(e) => go(e, "planner")}
-              className="group hidden h-11 items-center gap-2.5 rounded-full bg-[#FFC943] pl-5 pr-1.5 text-sm font-bold text-[#211F1A] transition-colors hover:bg-[#F1B82D] sm:inline-flex"
+              className="flex w-full items-center justify-center border border-neutral-900 bg-neutral-900 py-3 text-xs font-medium tracking-[0.22em] text-white"
             >
-              Plan my trip
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white">
-                <ArrowRight
-                  size={15}
-                  className="transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none"
-                />
-              </span>
+              Access v1.0
             </a>
-            <button
-              type="button"
-              aria-label={open ? "Close menu" : "Open menu"}
-              aria-expanded={open}
-              aria-controls="mobile-menu"
-              onClick={() => setOpen((o) => !o)}
-              className="flex h-11 w-11 items-center justify-center rounded-full text-[#211F1A] hover:bg-white/50 md:hidden"
-            >
-              {open ? <X size={20} /> : <Menu size={20} />}
-            </button>
           </div>
         </div>
-
-        {open && (
-          <div
-            id="mobile-menu"
-            className="rounded-b-[32px] border-t border-white/50 bg-[#FDFBF6]/75 p-3 backdrop-blur-xl md:hidden"
-          >
-            <ul>
-              {links.map((l) => (
-                <li key={l.id}>
-                  <a
-                    href={`/#${l.id}`}
-                    onClick={(e) => go(e, l.id)}
-                    className="block rounded-2xl px-4 py-3.5 text-[15px] font-medium text-[#211F1A] hover:bg-white/60"
-                  >
-                    {l.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-            <a
-              href="/#planner"
-              onClick={(e) => go(e, "planner")}
-              className="mt-2 flex h-12 items-center justify-center gap-2 rounded-full bg-[#FFC943] text-sm font-bold text-[#211F1A] sm:hidden"
-            >
-              Plan my trip <ArrowRight size={16} />
-            </a>
-          </div>
-        )}
-      </nav>
+      )}
     </header>
   );
 }

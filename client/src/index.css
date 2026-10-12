@@ -1,25 +1,63 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap");
 
+@theme {
+  --font-serif: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  --font-cormorant: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --color-gold: #C5A059;
+  --color-gold-dark: #A8833E;
+  --color-gold-light: #DFBF7D;
+}
 
 :root {
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-  color: #17251f;
-  background: #F7F4EC;
+  --font-serif: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  --font-cormorant: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  font-family: var(--font-sans);
+  color: #1a1917;
+  background: #FAF9F6;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-
 html {
-  scroll-padding-top: 4rem;
+  scroll-padding-top: 5rem;
+  scroll-behavior: smooth;
 }
 
 body {
-  font-family: "Manrope", "DM Sans", system-ui, sans-serif;
+  font-family: var(--font-sans);
+  background-color: #FAF9F6;
+  color: #1a1917;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.font-editorial-serif {
+  font-family: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+}
+
+.font-editorial-sans {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+}
+
+.font-cormorant {
+  font-family: "Cormorant Garamond", Georgia, serif;
+}
+
+.text-gold {
+  color: #C5A059;
+}
+
+.border-gold {
+  border-color: #C5A059;
+}
+
+.bg-gold {
+  background-color: #C5A059;
 }
 
 @media (prefers-reduced-motion: reduce) {
