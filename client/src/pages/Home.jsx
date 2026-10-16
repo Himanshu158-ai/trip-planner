@@ -85,7 +85,7 @@ function Counter({ label, unit, value, onChange, min, max, icon: Icon }) {
             type="button"
             aria-label={`Increase ${label}`}
             disabled={value >= max}
-            onClick={() => onChange(Math.max(max, value + 1))}
+            onClick={() => onChange(Math.min(max, value + 1))}
             className="flex h-8 w-8 items-center justify-center border border-neutral-300 bg-white text-neutral-700 transition hover:border-neutral-900 hover:text-neutral-900 disabled:opacity-30 disabled:hover:border-neutral-300"
           >
             <Plus size={13} />
