@@ -39,7 +39,7 @@ export const planner = async (req, res) => {
         const response = await plannerService(prompt);
         const data = response.output_text;
 
-        // parse JSON
+        // parse
         const tripPlan = JSON.parse(data);
 
         return res.status(200).json({
