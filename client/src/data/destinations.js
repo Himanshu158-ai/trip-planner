@@ -2,8 +2,7 @@
 const u = (id, w = 1200) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`;
 
-export const HERO_IMAGE =
-  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80";
+export const HERO_IMAGE = "https://i.pinimg.com/736x/77/15/da/7715daba2e48f9de7701e93617faa821.jpg";
 
 export const DESTINATIONS = [
   {
