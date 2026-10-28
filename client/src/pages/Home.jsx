@@ -238,7 +238,7 @@ export default function Home() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative z-10 mx-auto max-w-7xl px-6 pt-24 pb-16 sm:px-12 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24">
+      <section className="relative z-10 mx-auto max-w-7xl px-6 pt-24 pb-16 sm:px-12 sm:pt-32 sm:pb-20 lg:pt-26 lg:pb-24">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
           {/* Left Column: Exact Typography Aesthetic */}
           <div className="lg:col-span-7">
@@ -310,7 +310,7 @@ export default function Home() {
           {/* Right Column: Framed Editorial Photography */}
           <div className="lg:col-span-5">
             <div className="relative flex flex-col items-start lg:items-end">
-              <div className="relative aspect-[4/5] w-full max-w-[480px] overflow-hidden border border-neutral-200/80 bg-neutral-200 shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
+              <div className="relative aspect-[5/5.2] w-full max-w-[480px] overflow-hidden border border-neutral-200/80 bg-neutral-200 shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
                 <img
                   src={HERO_IMAGE}
                   alt="Curated travel retreat architecture"
