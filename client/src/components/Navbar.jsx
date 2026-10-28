@@ -86,7 +86,7 @@ export default function Navbar() {
           >
             <span className="absolute inset-0 translate-y-full bg-neutral-900 transition-transform duration-300 ease-out group-hover:translate-y-0" />
             <span className="relative z-10 transition-colors duration-300 group-hover:text-white">
-              Access v1.0
+              Plan trip
             </span>
           </a>
 
@@ -128,7 +128,7 @@ export default function Navbar() {
               onClick={(e) => go(e, "planner")}
               className="flex w-full items-center justify-center border border-neutral-900 bg-neutral-900 py-3 text-xs font-medium tracking-[0.22em] text-white"
             >
-              Access v1.0
+              Plan trip
             </a>
           </div>
         </div>

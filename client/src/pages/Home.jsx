@@ -505,7 +505,7 @@ export default function Home() {
                 {/* Gold luxury curtain fill */}
                 <span className="absolute inset-0 -translate-y-full bg-gradient-to-r from-[#B89047] via-[#C5A059] to-[#DFBF7D] transition-transform duration-400 ease-out group-hover:translate-y-0" />
                 <span className="relative z-10 transition-colors duration-300 group-hover:text-neutral-950">
-                  {loading ? "Orchestrating Dossier…" : "Generate Itinerary — v1.0"}
+                  {loading ? "Generating…" : "Generate Itinerary"}
                 </span>
                 {loading ? (
                   <LoaderCircle size={14} className="relative z-10 animate-spin group-hover:text-neutral-950" />
