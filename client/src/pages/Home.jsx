@@ -332,7 +332,7 @@ export default function Home() {
       {/* Planner Section */}
       <section
         id="planner"
-        className="relative z-10 scroll-mt-24 border-t border-neutral-200/60 px-6 py-20 sm:px-12 sm:py-28"
+        className="relative z-10 scroll-mt-10 border-t border-neutral-200/60 px-6 py-20 sm:px-1 sm:py-28"
       >
         <div className="mx-auto max-w-4xl">
           <SectionHeading
@@ -443,9 +443,9 @@ export default function Home() {
                     onChange={(e) => setTravelType(e.target.value)}
                     className="h-[52px] w-full appearance-none border border-neutral-200 bg-[#FAF9F6] px-4 pr-10 text-[14px] text-neutral-900 outline-none transition focus:border-neutral-900 focus:bg-white"
                   >
-                    <option>Solo Expedition</option>
+                    <option>Solo</option>
                     <option>Couple</option>
-                    <option>Intimate Friends</option>
+                    <option>Friends</option>
                     <option>Family</option>
                   </select>
                   <ChevronDown
