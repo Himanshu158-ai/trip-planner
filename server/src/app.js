@@ -7,8 +7,13 @@ const app = express();
 //middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
-
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://trip-planner-sage-eta.vercel.app/"
+  ],
+  credentials: true
+}));
 
 //import routes
 app.use('/api/ai', aiRoute);
