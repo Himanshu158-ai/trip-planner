@@ -7,13 +7,16 @@ const app = express();
 //middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://trip-planner-sage-eta.vercel.app",
+];
+
 app.use(cors({
-  origin: [
-    // "http://localhost:5173",
-    // "https://trip-planner-sage-eta.vercel.app/"
-    "*"
-  ],
-  credentials: true
+  origin: allowedOrigins,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 }));
 
 //import routes
